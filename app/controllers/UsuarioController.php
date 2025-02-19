@@ -7,6 +7,7 @@ use Config\Conexion;
 
 class UsuarioController{
     public function __construct(){
+        session_start();
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $this->registrarUsuario();
         }else{
@@ -21,7 +22,9 @@ class UsuarioController{
         $password = $this->validarPassword($_POST['password']);
 
         if(!$nombre || !$apellidos || !$email || !$password){
-            die("Datos inválidos");
+            $_SESSION['mensaje'] = "Datos inválidos";
+            header('Location: ../views/usuario/formularioRegistro.php');
+            exit();
         }
 
         $conexion = Conexion::Conectar();
@@ -32,13 +35,16 @@ class UsuarioController{
         $stmt->bindParam(':nombre', $nombre);
         $stmt->bindParam(':apellidos', $apellidos);
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':password', password_hash($password, PASSWORD_DEFAULT));
 
         if($stmt->execute()){
-            echo 'Usuario registrado con éxito';
+            $_SESSION['mensaje'] = 'Usuario registrado con éxito';
         }else{
-            echo 'Error al registrar el usuario';
+            $_SESSION['mensaje'] =  'Error al registrar el usuario';
         }
+
+        header('Location: ../views/usuario/formularioRegistro.php');
+        exit();
     }
 
 

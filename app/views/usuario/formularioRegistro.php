@@ -7,19 +7,28 @@
 </head>
 <body>
     <h1>REGISTRO DE USUARIO</h1>
+
+    <?php
+        if(isset($_SESSION['mensaje'])){
+            echo $_SESSION['mensaje'];
+            unset($_SESSION['mensaje']);
+        }
+    ?>
     <form action="../../controllers/UsuarioController.php" method="POST">
         <label for="nombre">Nombre: </label>
         <input type="text" name="nombre" id="nombre" required>
 
         <label for="apellidos">Apellidos: </label>
         <input type="text" name="apellidos" id="apellidos" required>
-        
+
         <label for="email">Email: </label>
         <input type="email" name="email" id="email" required>
 
 
         <label for="password">Contraseña: </label>
         <input type="password" name="password" id="password" required>
+
+        <input type="submit" value="Registrar">
     </form>
 </body>
 </html>
