@@ -11,7 +11,7 @@
         <nav>
             <ul>
                 <li><a href="../app/views/usuario/formularioRegistro.php">Registrarse</a></li>
-                <li><a href="">Iniciar Sesión</a></li>
+                <li><a href="../app/views/usuario/formularioLogin.php">Iniciar Sesión</a></li>
             </ul>
     </header>
 </body>

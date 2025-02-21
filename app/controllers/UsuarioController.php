@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use PDO;
+
 require_once('../../config/Conexion.php');
 
 use Config\Conexion;
@@ -53,6 +55,50 @@ class UsuarioController{
         }
     }
 
+    public function iniciarSesion(){
+        $email = $this->validarEmail($_POST['email']);
+        $password = $this->validarPassword($_POST['password']);
+
+        if(!$email || !$password){
+            $_SESSION['mensaje'] = "Datos inválidos";
+            header('Location: ../views/usuario/formularioLogin.php');
+            exit();
+        }
+
+        $conexion = Conexion::Conectar();
+        $sql = "SELECT * FROM usuarios WHERE email = :email";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        //Si no existe el usuario
+        if(!$usuario){
+            $_SESSION['mensaje'] = 'Ese usuario no está registrado';
+            header('Location: ../views/usuario/formularioLogin.php');
+            exit();
+        }
+
+        if(password_verify($password, $usuario['password'])){
+            $_SESSION['id'] = $usuario['id'];
+            $_SESSION['nombre'] = $usuario['nombre'];
+            $_SESSION['apellidos'] = $usuario['apellidos'];
+            $_SESSION['email'] = $usuario['email'];
+            $_SESSION['rol'] = $usuario['rol'];
+
+
+            if($usuario['rol'] == 'admin'){
+                header('Location: ../views/admin/index.php');
+            }else{
+                header('Location: ../../public/index.php');
+            }
+            exit();
+        }else{
+            $_SESSION['mensaje'] = 'Contraseña incorrecta';
+            header('Location: ../views/usuario/formularioLogin.php');
+            exit();
+        }
+    }
 
     private function validarNombre($nombre){
         $nombre = trim($nombre);
@@ -86,6 +132,7 @@ class UsuarioController{
             exit();
         }
     }
+
 }
 
 new UsuarioController();
