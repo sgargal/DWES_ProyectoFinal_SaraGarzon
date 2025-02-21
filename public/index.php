@@ -6,14 +6,9 @@
     <title>TIENDA ONLINE</title>
 </head>
 <body>
-    <header>
-        <h1>Tienda online</h1>
-        <nav>
-            <ul>
-                <li><a href="../app/views/usuario/formularioRegistro.php">Registrarse</a></li>
-                <li><a href="">Iniciar Sesión</a></li>
-            </ul>
-    </header>
+    <?php
+    include '../app/views/layout/header.php';
+    ?>
     <main>
         <aside class="barraLateral">
             <h2>Categorías</h2>
