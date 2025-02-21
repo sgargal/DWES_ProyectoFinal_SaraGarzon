@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,7 @@
 
     <?php
         if(isset($_SESSION['mensaje'])){
-            echo $_SESSION['mensaje'];
+            echo "<p style='color:red;'>" . $_SESSION['mensaje'];
             unset($_SESSION['mensaje']);
         }
     ?>
