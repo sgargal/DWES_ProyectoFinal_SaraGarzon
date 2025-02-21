@@ -19,6 +19,9 @@ class UsuarioController{
                     case 'iniciarSesion':
                         $this->iniciarSesion();
                         break;
+                    case 'cerrarSesion':
+                        $this->cerrarSesion();
+                        break;
                     default:
                         echo 'Acción no reconocida';
                         break;
@@ -92,24 +95,21 @@ class UsuarioController{
         }
 
         if(password_verify($password, $usuario['password'])){
-            $_SESSION['id'] = $usuario['id'];
-            $_SESSION['nombre'] = $usuario['nombre'];
-            $_SESSION['apellidos'] = $usuario['apellidos'];
-            $_SESSION['email'] = $usuario['email'];
-            $_SESSION['rol'] = $usuario['rol'];
-
-
-            if($usuario['rol'] == 'admin'){
-                header('Location: ../views/admin/index.php');
-            }else{
-                header('Location: ../../public/index.php');
-            }
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['mensaje'] = 'Inicio de sesión exitoso';
+            header('Location: ../../public/index.php');
             exit();
         }else{
             $_SESSION['mensaje'] = 'Contraseña incorrecta';
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
+    }
+
+    public function cerrarSesion(){
+        session_destroy();
+        header('Location: ../../public/index.php');
+        exit();
     }
 
     private function validarNombre($nombre){
