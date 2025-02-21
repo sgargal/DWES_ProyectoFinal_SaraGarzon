@@ -19,6 +19,7 @@ session_start();
         }
     ?>
     <form action="../../controllers/UsuarioController.php" method="POST">
+        <input type="hidden" name="action" value="registrarUsuario">
         <label for="nombre">Nombre: </label>
         <input type="text" name="nombre" id="nombre" required>
 

@@ -19,6 +19,7 @@
     ?>
 
     <form action="../../controllers/UsuarioController.php" method="POST">
+        <input type="hidden" name="action" value="iniciarSesion">
         <label for="email">Email: </label>
         <input type="email" name="email" id="email" required>
 

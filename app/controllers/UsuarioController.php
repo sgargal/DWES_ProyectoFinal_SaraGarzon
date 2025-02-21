@@ -8,11 +8,23 @@ require_once('../../config/Conexion.php');
 use Config\Conexion;
 
 class UsuarioController{
-    public function __construct(){
+    public function __construct() {
         session_start();
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $this->registrarUsuario();
-        }else{
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_POST['action'])) {
+                switch ($_POST['action']) {
+                    case 'registrarUsuario':
+                        $this->registrarUsuario();
+                        break;
+                    case 'iniciarSesion':
+                        $this->iniciarSesion();
+                        break;
+                    default:
+                        echo 'Acción no reconocida';
+                        break;
+                }
+            }
+        } else {
             echo 'No se puede acceder a este recurso';
         }
     }
