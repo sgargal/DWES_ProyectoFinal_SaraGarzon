@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
-    <header>
+    <header class="header-form">
         <h1>Tienda Online</h1>
         <nav>
             <ul>
@@ -24,7 +24,7 @@
 
         <?php
         if(isset($_SESSION['mensaje'])){
-            echo $_SESSION['mensaje'];
+            echo '<div class="mensaje">' . $_SESSION['mensaje'] . '</div>';
             unset($_SESSION['mensaje']);
         }
         ?>
