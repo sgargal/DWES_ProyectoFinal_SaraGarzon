@@ -119,7 +119,7 @@ main {
 
 .barraLateral h2 {
     font-size: 1.6rem;
-    color: white;
+    color: rgb(255, 255, 255);
     margin-bottom: 20px;
 }
 
@@ -173,7 +173,7 @@ main {
 }
 
 .contenidoPrincipal form button {
-    background-color: #e74c3c; /* Rojo suave */
+    background-color: #e74c3c;
     color: white;
     padding: 10px 15px;
     border-radius: 5px;
@@ -209,11 +209,11 @@ button:hover {
 
 /* --- FOOTER --- */
 footer {
-    background-color: #333;  /* Un fondo oscuro para el pie de página */
-    color: white;            /* Texto blanco para contrastar con el fondo oscuro */
-    text-align: center;      /* Centrar el texto */
-    padding: 15px 0;         /* Espaciado arriba y abajo */
-    font-size: 1rem;         /* Tamaño de fuente para el texto */
+    background-color: #333;  
+    color: white;            
+    text-align: center;      
+    padding: 15px 0;       
+    font-size: 1rem;       
     position: relative;
     bottom: 0;
     width: 100%;             /* Asegura que el footer ocupe todo el ancho de la página */

@@ -52,7 +52,9 @@
 
     </main>
     <footer>
-        <p>Realizado por Sara Garzón ;)</p>
+        <?php
+        include '../app/views/layout/footer.php';
+        ?>
     </footer>
 </body>
 </html>
