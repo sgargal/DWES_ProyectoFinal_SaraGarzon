@@ -36,19 +36,20 @@
                 echo '<h2>Bienvenido, ' .htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']) . '</h2>';
                 if($usuario['rol'] == 'admin'){
                     echo '<p>Aquí puedes gestionar la tienda</p>';
+
                 }else{
                     echo '<p>Aquí puedes ver los productos de la tienda</p>';
                 }
+                echo '<form action="../app/controllers/UsuarioController.php" method="POST">
+                            <input type="hidden" name="action" value="cerrarSesion">
+                            <button type="submit">Cerrar sesión</button>
+                        </form>';
             }else{
                 echo '<h2>Bienvenido a la tienda online</h2>';
                 echo '<p>Regístrate o inicia sesión para hacer tu pedido</p>';
             }
             ?>
         </section>
-        <form action="../app/controllers/UsuarioController.php" method="POST">
-            <input type="hidden" name="action" value="cerrarSesion">
-            <button type="submit">Cerrar sesión</button>
-        </form>
 
     </main>
 </body>
