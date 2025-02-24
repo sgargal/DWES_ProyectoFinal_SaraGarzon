@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,8 +22,8 @@
         <aside class="barraLateral">
             <h2>Categorías</h2>
             <ul>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
+                <li><a href="Maquillaje"></a></li>
+                <li><a href="Bolsas"></a></li>
                 <li><a href=""></a></li>
             </ul>
         </aside>

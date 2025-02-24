@@ -10,6 +10,7 @@ session_start();
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
+    
     <h1>REGISTRO DE USUARIO</h1>
 
     <!-- Mostrar mensaje de la última acción realizada -->
