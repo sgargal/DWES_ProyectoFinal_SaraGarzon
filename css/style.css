@@ -1,1 +1,209 @@
+/* --- ESTILOS GENERALES --- */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* --- HEADER --- */
+.header-inicio {
+    background: black;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo del título */
+.header-inicio h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Navegación */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    background: #05977a;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover {
+    background: #3bcbaf;
+    transform: scale(1.05);
+}
+
+/* Enlace especial para el administrador */
+nav ul li a.admin-link {
+    background: #e74c3c;
+}
+
+nav ul li a.admin-link:hover {
+    background: #c0392b;
+}
+
+/* --- BARRA LATERAL --- */
+.barraLateral {
+    width: 250px;
+    background-color: #ea9393;  /* Rosa suave que complementa el fondo principal */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.barraLateral h2 {
+    font-size: 1.6rem;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.barraLateral ul {
+    list-style: none;
+    padding: 0;
+}
+
+.barraLateral ul li {
+    margin: 10px 0;
+}
+
+.barraLateral ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #05977a;  /* Usamos el mismo color que para los enlaces del header */
+    transition: background 0.3s, transform 0.2s;
+}
+
+.barraLateral ul li a:hover {
+    background-color: #3bcbaf;
+    transform: scale(1.05);
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+main {
+    display: flex;
+    flex-direction: row;
+}
+
+/* --- BARRA LATERAL --- */
+.barraLateral {
+    width: 250px;
+    background-color: #f69292;  /* Rosa suave que complementa el fondo principal */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.barraLateral h2 {
+    font-size: 1.6rem;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.barraLateral ul {
+    list-style: none;
+    padding: 0;
+}
+
+.barraLateral ul li {
+    margin: 10px 0;
+}
+
+.barraLateral ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #05977a;  /* Verde para los enlaces */
+    transition: background 0.3s, transform 0.2s;
+}
+
+.barraLateral ul li a:hover {
+    background-color: #3bcbaf;
+    transform: scale(1.05);
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.contenidoPrincipal {
+    flex: 1;  /* Esto hace que el contenido ocupe el espacio restante */
+    padding: 20px;
+    font-size: 1.2rem;
+}
+
+.contenidoPrincipal h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.contenidoPrincipal p {
+    color: #555;
+}
+
+.contenidoPrincipal form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contenidoPrincipal form button {
+    background-color: #e74c3c; /* Rojo suave */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.contenidoPrincipal form button:hover {
+    background-color: #c0392b;  /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+
+/* Estilos generales para botones */
+button {
+    background-color: #05977a; /* Verde que acompaña el diseño del header */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #3bcbaf; /* Tono más claro para el hover */
+    transform: scale(1.05);
+}
+
 

@@ -14,7 +14,7 @@ $usuarioLogueado = isset($_SESSION['usuario']); // Verifica si hay sesión activ
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-    <header>
+    <header class="header-inicio">
         <h1>Tienda online</h1>
         <nav>
             <ul>
