@@ -1,4 +1,12 @@
-/* Estilos generales del header */
+/* --- ESTILOS GENERALES --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* --- HEADER --- */
 header {
     background: #2c3e50;
     color: white;
@@ -26,7 +34,6 @@ nav ul {
     gap: 20px;
 }
 
-/* Estilos de los enlaces */
 nav ul li {
     display: inline;
 }
@@ -44,22 +51,14 @@ nav ul li a:hover {
     background: #16a085;
 }
 
-/* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-/* Contenedor principal */
+/* --- CONTENEDOR PRINCIPAL --- */
 main {
     display: flex;
     width: 90%;
     margin: 20px auto;
 }
 
-/* Barra lateral */
+/* --- BARRA LATERAL --- */
 .barraLateral {
     width: 25%;
     background: #2c3e50;
@@ -99,7 +98,7 @@ main {
     background: #1abc9c;
 }
 
-/* Contenido principal */
+/* --- CONTENIDO PRINCIPAL --- */
 .contenidoPrincipal {
     flex: 1;
     padding: 20px;
@@ -109,28 +108,76 @@ main {
     margin-left: 20px;
 }
 
-/* Encabezados */
 h2 {
     color: #2c3e50;
 }
 
-/* Botón de cerrar sesión */
-form {
+/* --- FORMULARIOS (LOGIN Y REGISTRO) --- */
+.formulario-container {
+    background: white;
+    padding: 30px;
+    max-width: 400px;
+    margin: 40px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    margin-top: 20px;
 }
 
+.formulario-container h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* --- BOTÓN PRINCIPAL --- */
+input[type="submit"],
 button {
-    background: #e74c3c;
+    background: #27ae60;
     color: white;
     border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    margin-top: 15px;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
     transition: background 0.3s;
+}
+
+input[type="submit"]:hover {
+    background: #219150;
+}
+
+/* --- BOTÓN DE CERRAR SESIÓN --- */
+button {
+    background: #e74c3c;
 }
 
 button:hover {
     background: #c0392b;
+}
+
+/* --- MENSAJES DE SESIÓN --- */
+.mensaje {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
