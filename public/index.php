@@ -22,8 +22,8 @@
         <aside class="barraLateral">
             <h2>Categorías</h2>
             <ul>
-                <li><a href="Maquillaje">Nose</a></li>
-                <li><a href="Bolsas">Nose tampoco</a></li>
+                <li><a href="">Nose</a></li>
+                <li><a href="">Nose tampoco</a></li>
                 <li><a href="">Nolose</a></li>
             </ul>
         </aside>

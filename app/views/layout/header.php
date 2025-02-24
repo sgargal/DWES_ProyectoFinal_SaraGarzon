@@ -27,7 +27,7 @@ $usuarioLogueado = isset($_SESSION['usuario']); // Verifica si hay sesión activ
                     <li><a href="/proyectoFinal_SaraGarzon/app/views/usuario/perfil.php">Perfil</a></li>
 
                     <?php if ($_SESSION['usuario']['rol'] == 'admin'): ?>
-                        <li><a href="../app/views/admin/dashboard.php">Panel Admin</a></li>
+                        <li><a href="/proyectoFinal_SaraGarzon/app/views/admin/panelAdmin.php">Panel Admin</a></li>
                     <?php endif; ?>
                 <?php endif; ?>
             </ul>
