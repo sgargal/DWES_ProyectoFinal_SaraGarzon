@@ -24,7 +24,9 @@
 
         <?php
         if(isset($_SESSION['mensaje'])){
-            echo '<div class="mensaje">' . $_SESSION['mensaje'] . '</div>';
+            $mensaje = $_SESSION['mensaje'];
+            $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+            echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
             unset($_SESSION['mensaje']);
         }
         ?>

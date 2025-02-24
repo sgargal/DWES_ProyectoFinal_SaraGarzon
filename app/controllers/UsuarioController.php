@@ -41,7 +41,10 @@ class UsuarioController{
         $rol='user';
 
         if(!$nombre || !$apellidos || !$email || !$password){
-            $_SESSION['mensaje'] = "Datos inválidos";
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Datos inválidos"
+            ];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -60,11 +63,17 @@ class UsuarioController{
         $stmt->bindParam(':rol', $rol);
 
         if($stmt->execute()){
-            $_SESSION['mensaje'] = 'Usuario registrado con éxito';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'success',
+                'contenido' => 'Usuario registrado con éxito'
+            ];
             header('Location: ../../public/index.php');
             exit();
         }else{
-            $_SESSION['mensaje'] =  'Error al registrar el usuario';
+            $_SESSION['mensaje'] =  [
+                'tipo' => 'error',
+                'contenido' => 'Error al registrar el usuario'
+            ];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -75,7 +84,10 @@ class UsuarioController{
         $password = $this->validarPassword($_POST['password']);
 
         if(!$email || !$password){
-            $_SESSION['mensaje'] = "Datos inválidos";
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Datos inválidos"
+            ];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
@@ -89,18 +101,27 @@ class UsuarioController{
 
         //Si no existe el usuario
         if(!$usuario){
-            $_SESSION['mensaje'] = 'Ese usuario no está registrado';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Este usuario no esta registrado"
+            ];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
 
         if(password_verify($password, $usuario['password'])){
             $_SESSION['usuario'] = $usuario;
-            $_SESSION['mensaje'] = 'Inicio de sesión exitoso';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'success',
+                'contenido' => "Inicio de sesión exitoso"
+            ];
             header('Location: ../../public/index.php');
             exit();
         }else{
-            $_SESSION['mensaje'] = 'Contraseña incorrecta';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Contraseña incorrecta"
+            ];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
@@ -117,7 +138,10 @@ class UsuarioController{
         if(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $nombre)){
             return $nombre;
         }else{
-            $_SESSION['mensaje'] = 'El nombre no es válido';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "El nombre no es válido"
+            ];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -128,7 +152,10 @@ class UsuarioController{
         if(filter_var($email, FILTER_VALIDATE_EMAIL)){
             return $email;
         }else{
-            $_SESSION['mensaje'] = 'El email no es válido';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "El email no es válido"
+            ];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -139,7 +166,10 @@ class UsuarioController{
         if(strlen($password) >= 8){
             return $password;
         }else{
-            $_SESSION['mensaje'] = 'La contraseña debe tener al menos 8 caracteres';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => 'La contraseña debe tener al menos 8 caracteres'
+            ];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }

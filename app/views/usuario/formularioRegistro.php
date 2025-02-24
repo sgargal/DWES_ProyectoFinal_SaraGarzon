@@ -23,11 +23,14 @@ session_start();
 
         <!-- Mostrar mensaje de la última acción realizada -->
         <?php
-            if(isset($_SESSION['mensaje'])){
-                echo '<div class="mensaje">' . $_SESSION['mensaje'] . '</div>';
-                unset($_SESSION['mensaje']);
-            }
+        if(isset($_SESSION['mensaje'])){
+            $mensaje = $_SESSION['mensaje'];
+            $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+            echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
+            unset($_SESSION['mensaje']);
+        }
         ?>
+        
         <form action="../../controllers/UsuarioController.php" method="POST">
             <input type="hidden" name="action" value="registrarUsuario">
             <label for="nombre">Nombre: </label>
