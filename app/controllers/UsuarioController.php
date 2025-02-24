@@ -2,6 +2,8 @@
 namespace App\Controllers;
 
 use PDO;
+use PDOException;
+
 
 require_once('../../config/Conexion.php');
 
@@ -21,6 +23,9 @@ class UsuarioController{
                         break;
                     case 'cerrarSesion':
                         $this->cerrarSesion();
+                        break;
+                    case 'editarUsuario':
+                        $this->editarUsuario();
                         break;
                     default:
                         echo 'Acción no reconocida';
@@ -127,11 +132,80 @@ class UsuarioController{
         }
     }
 
+
     public function cerrarSesion(){
         session_destroy();
         header('Location: ../../public/index.php');
         exit();
     }
+
+    public function editarUsuario(){
+        if (isset($_POST['editarUsuario'])) {
+            try {
+                $conexion = Conexion::Conectar();
+    
+                // Obtiene los datos del formulario
+                $id = $_POST['id'];
+                $nombre = $this->validarNombre($_POST['nombre']);
+                $apellidos = $this->validarNombre($_POST['apellidos']);
+                $email = $this->validarEmail($_POST['email']);
+                $rol = $_POST['rol'];
+                $password = !empty($_POST['password']) ? $_POST['password'] : null;
+    
+                if (!$id || !$nombre || !$apellidos || !$email || !$rol) {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'error',
+                        'contenido' => "Datos inválidos"
+                    ];
+                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
+                    exit();
+                }
+    
+                // Construcción de la consulta SQL
+                if ($password) {
+                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                    $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email, password = :password, rol = :rol WHERE id = :id";
+                } else {
+                    $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email, rol = :rol WHERE id = :id";
+                }
+    
+                $stmt = $conexion->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->bindParam(':nombre', $nombre);
+                $stmt->bindParam(':apellidos', $apellidos);
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':rol', $rol);
+    
+                if ($password) {
+                    $stmt->bindParam(':password', $passwordHash);
+                }
+    
+                if ($stmt->execute()) {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'success',
+                        'contenido' => 'Usuario actualizado correctamente'
+                    ];
+                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
+                    exit();
+                } else {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'error',
+                        'contenido' => 'Error al actualizar el usuario'
+                    ];
+                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
+                    exit();
+                }
+            } catch (PDOException $error) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => "Error en la base de datos: " . $error->getMessage()
+                ];
+                header("Location: ../views/usuario/editarUsuario.php?id=$id");
+                exit();
+            }
+        }
+    }
+    
 
     private function validarNombre($nombre){
         $nombre = trim($nombre);

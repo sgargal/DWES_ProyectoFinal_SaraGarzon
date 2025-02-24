@@ -1,7 +1,5 @@
 <?php
 
-require_once('../config/Conexion.php');
-
 use Config\Conexion;
 
 
@@ -123,14 +121,48 @@ class Usuario{
             $stmt = $conexion->prepare($sql);
             $stmt->bindParam(':id', $idUsuario);
 
-            if($stmt->execute()){
-                return "Usuario actualizado a administrador";
-            }else{
-                return "Error al actualizar el rol del usuario";
+            if (!$stmt->execute()) {
+                throw new Exception("Error al actualizar el rol del usuario");
             }
+    
+            return "Usuario actualizado a administrador";
+
         }catch(PDOException $error){
             return "Error en la base de datos: " . $error->getMessage();
         }
     }
+
+    public function editarUsuario($id, $nombre, $apellidos, $email, $password, $rol) {
+        try {
+            $conexion = Conexion::Conectar();
+
+            if (!empty($password)) {
+                $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+                $sql = "UPDATE usuarios 
+                        SET nombre = :nombre, apellidos = :apellidos, email = :email, password = :password, rol = :rol 
+                        WHERE id = :id";
+            } else {
+                $sql = "UPDATE usuarios 
+                        SET nombre = :nombre, apellidos = :apellidos, email = :email, rol = :rol 
+                        WHERE id = :id";
+            }
+
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':apellidos', $apellidos);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':rol', $rol);
+
+            if (!empty($password)) {
+                $stmt->bindParam(':password', $passwordHash);
+            }
+
+            return $stmt->execute();  // Devuelve true si se actualizó correctamente
+        } catch (PDOException $error) {
+            throw new Exception("Error en la base de datos: " . $error->getMessage());
+        }
+    }
 }
+
 ?>
