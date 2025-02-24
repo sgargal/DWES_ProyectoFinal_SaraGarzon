@@ -338,3 +338,70 @@ main {
 footer {
     margin-top: auto; /* Empuja el footer hacia abajo */
 }
+
+/* Perfil Container */
+.perfil-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-container h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.perfil-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.perfil-info p {
+    font-size: 1rem;
+    margin: 8px 0;
+}
+
+.perfil-info strong {
+    font-weight: bold;
+    color: #05977a;
+}
+
+/* Acciones */
+.acciones {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.acciones h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.acciones ul {
+    list-style: none;
+    padding: 0;
+}
+
+.acciones ul li {
+    margin: 10px 0;
+}
+
+.acciones ul li a {
+    text-decoration: none;
+    color: #05977a;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.acciones ul li a:hover {
+    color: #3bcbaf;
+}

@@ -8,7 +8,7 @@
 </head>
 <body>
    <footer>
-        <p>Realizado por Sara Garzón</p>
+        <p>Realizado por Sara Garzón ;)</p>
    </footer> 
 </body>
 </html>
