@@ -207,3 +207,28 @@ button:hover {
 }
 
 
+/* --- FOOTER --- */
+footer {
+    background-color: #333;  /* Un fondo oscuro para el pie de página */
+    color: white;            /* Texto blanco para contrastar con el fondo oscuro */
+    text-align: center;      /* Centrar el texto */
+    padding: 15px 0;         /* Espaciado arriba y abajo */
+    font-size: 1rem;         /* Tamaño de fuente para el texto */
+    position: relative;
+    bottom: 0;
+    width: 100%;             /* Asegura que el footer ocupe todo el ancho de la página */
+}
+
+/* Estilos para que el footer se quede abajo de la página */
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    flex: 1;  /* Esto hace que el contenido principal ocupe el espacio restante */
+}
+
+footer {
+    margin-top: auto; /* Empuja el footer hacia abajo */
+}
