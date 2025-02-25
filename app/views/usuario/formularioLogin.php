@@ -19,29 +19,36 @@
         </nav>
 
     </header>
-    <div class="formulario-container">
-        <h1>INICIO DE SESIÓN</h1>
+    <main>
+        <div class="formulario-container">
+            <h1>INICIO DE SESIÓN</h1>
 
+            <?php
+            if(isset($_SESSION['mensaje'])){
+                $mensaje = $_SESSION['mensaje'];
+                $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+                echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
+                unset($_SESSION['mensaje']);
+            }
+            ?>
+
+            <form action="../../controllers/UsuarioController.php" method="POST">
+                <input type="hidden" name="action" value="iniciarSesion">
+                <label for="email">Email: </label>
+                <input type="email" name="email" id="email" required>
+
+
+                <label for="password">Contraseña: </label>
+                <input type="password" name="password" id="password" required>
+
+                <input type="submit" value="Iniciar Sesión">
+            </form>
+        </div>
+    </main>
+    <footer>
         <?php
-        if(isset($_SESSION['mensaje'])){
-            $mensaje = $_SESSION['mensaje'];
-            $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
-            echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
-            unset($_SESSION['mensaje']);
-        }
+            include '../layout/footer.php';
         ?>
-
-        <form action="../../controllers/UsuarioController.php" method="POST">
-            <input type="hidden" name="action" value="iniciarSesion">
-            <label for="email">Email: </label>
-            <input type="email" name="email" id="email" required>
-
-
-            <label for="password">Contraseña: </label>
-            <input type="password" name="password" id="password" required>
-
-            <input type="submit" value="Iniciar Sesión">
-        </form>
-    </div>
+    </footer>
 </body>
 </html>
