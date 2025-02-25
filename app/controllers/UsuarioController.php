@@ -3,10 +3,10 @@ namespace App\Controllers;
 
 use PDO;
 use PDOException;
-
+require_once('../models/usuario.php');
+use App\Models\Usuario; // Importa el modelo Usuario
 
 require_once('../../config/Conexion.php');
-
 use Config\Conexion;
 
 class UsuarioController{
@@ -51,57 +51,27 @@ class UsuarioController{
         $apellidos = $this->validarNombre($_POST['apellidos']);
         $email = $this->validarEmail($_POST['email']);
         $password = $this->validarPassword($_POST['password']);
-
-        $rol='user';
-
+        
         if(!$nombre || !$apellidos || !$email || !$password){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "Datos inválidos"
-            ];
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "Datos inválidos"];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
 
-        $conexion = Conexion::Conectar();
+        $usuario = new Usuario(null, $nombre, $apellidos, $email, $password, 'user');
+        $mensaje = $usuario->registro();
 
-
-        $sql = "INSERT INTO usuarios(nombre, apellidos, email, password, rol) VALUES(:nombre, :apellidos, :email, :password, :rol)";
-        $stmt = $conexion->prepare($sql);
-
-        $contraseñaCifrada= password_hash($password, PASSWORD_DEFAULT);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellidos', $apellidos);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $contraseñaCifrada);
-        $stmt->bindParam(':rol', $rol);
-
-        if($stmt->execute()){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'success',
-                'contenido' => 'Usuario registrado con éxito'
-            ];
-            header('Location: ../../public/index.php');
-            exit();
-        }else{
-            $_SESSION['mensaje'] =  [
-                'tipo' => 'error',
-                'contenido' => 'Error al registrar el usuario'
-            ];
-            header('Location: ../views/usuario/formularioRegistro.php');
-            exit();
-        }
+        $_SESSION['mensaje'] = ['tipo' => 'success', 'contenido' => $mensaje];
+        header('Location: ../../public/index.php');
+        exit();
     }
 
     public function iniciarSesion(){
         $email = $this->validarEmail($_POST['email']);
         $password = $this->validarPassword($_POST['password']);
-
+        
         if(!$email || !$password){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "Datos inválidos"
-            ];
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "Datos inválidos"];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
@@ -113,114 +83,72 @@ class UsuarioController{
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        //Si no existe el usuario
-        if(!$usuario){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "Este usuario no esta registrado"
-            ];
+        if(!$usuario || !password_verify($password, $usuario['password'])){
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "Contraseña incorrecta"];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
 
-        if(password_verify($password, $usuario['password'])){
-            $_SESSION['usuario'] = $usuario;
-            $_SESSION['mensaje'] = [
-                'tipo' => 'success',
-                'contenido' => "Inicio de sesión exitoso"
-            ];
-
-            if(isset($_POST['recordarme'])){
-                setcookie('email_usuario', $email, time() +(7 * 24 * 60 * 60), "/");
-            }else{
-                setcookie('email_usuario', '', time() - 3600, "/");
-            }
-            
-            header('Location: ../../public/index.php');
-            exit();
-        }else{
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "Contraseña incorrecta"
-            ];
-            header('Location: ../views/usuario/formularioLogin.php');
-            exit();
-        }
+        $_SESSION['usuario'] = $usuario;
+        $_SESSION['mensaje'] = ['tipo' => 'success', 'contenido' => "Inicio de sesión exitoso"];
+        header('Location: ../../public/index.php');
+        exit();
     }
-
 
     public function cerrarSesion(){
         session_destroy();
         header('Location: ../../public/index.php');
         exit();
     }
-
+    
     public function editarUsuario(){
-        if (isset($_POST['action']) && $_POST['action'] == 'editarUsuario') {
-            try {
-                $conexion = Conexion::Conectar();
+        // Validación de los datos recibidos
+        $id = $_POST['id']; // El id del usuario que se quiere editar
+        $nombre = $this->validarNombre($_POST['nombre']);
+        $apellidos = $this->validarNombre($_POST['apellidos']);
+        $email = $this->validarEmail($_POST['email']);
+        $rol = $_POST['rol'];
+        $password = !empty($_POST['password']) ? $_POST['password'] : null; // Si hay contraseña, se usará
     
-                // Obtiene los datos del formulario
-                $id = $_POST['id'];
-                $nombre = $this->validarNombre($_POST['nombre']);
-                $apellidos = $this->validarNombre($_POST['apellidos']);
-                $email = $this->validarEmail($_POST['email']);
-                $rol = $_POST['rol'];
-                $password = !empty($_POST['password']) ? $_POST['password'] : null;
+        // Verificamos que los datos sean válidos
+        if (!$id || !$nombre || !$apellidos || !$email || !$rol) {
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Datos inválidos"
+            ];
+            header("Location: ../views/usuario/editarUsuario.php?id=$id");
+            exit();
+        }
     
-                if (!$id || !$nombre || !$apellidos || !$email || !$rol) {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'error',
-                        'contenido' => "Datos inválidos"
-                    ];
-                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
-                    exit();
-                }
-    
-                // Construcción de la consulta SQL
-                if ($password) {
-                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                    $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email, password = :password, rol = :rol WHERE id = :id";
-                } else {
-                    $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email, rol = :rol WHERE id = :id";
-                }
-    
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(':id', $id);
-                $stmt->bindParam(':nombre', $nombre);
-                $stmt->bindParam(':apellidos', $apellidos);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':rol', $rol);
-    
-                if ($password) {
-                    $stmt->bindParam(':password', $passwordHash);
-                }
-    
-                if ($stmt->execute()) {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'success',
-                        'contenido' => 'Usuario actualizado correctamente'
-                    ];
-                    header("Location: ../views/admin/panelAdmin.php");
-                    exit();
-                } else {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'error',
-                        'contenido' => 'Error al actualizar el usuario'
-                    ];
-                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
-                    exit();
-                }
-            } catch (PDOException $error) {
+        // Llamamos al modelo Usuario para actualizar el usuario
+        try {
+            $usuario = new Usuario($id, $nombre, $apellidos, $email, $password, $rol); // Creando un objeto Usuario con los datos
+            if ($usuario->editarUsuario($id, $nombre, $apellidos, $email, $password, $rol)) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'contenido' => 'Usuario actualizado correctamente'
+                ];
+                header("Location: ../views/admin/panelAdmin.php");
+                exit();
+            } else {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
-                    'contenido' => "Error en la base de datos: " . $error->getMessage()
+                    'contenido' => 'Error al actualizar el usuario'
                 ];
-                header("Location: ../views/usuario/editarUsuario.php");
+                header("Location: ../views/usuario/editarUsuario.php?id=$id");
                 exit();
             }
+        } catch (PDOException $e) {
+            // En caso de error en la base de datos o en el proceso
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => "Error en la base de datos: " . $e->getMessage()
+            ];
+            header("Location: ../views/usuario/editarUsuario.php?id=$id");
+            exit();
         }
     }
+    
 
     public function editarPerfil(){
         $nombre = $this->validarNombre($_POST['nombre']);
@@ -228,161 +156,122 @@ class UsuarioController{
         $email = $this->validarEmail($_POST['email']);
 
         if(!$nombre | !$apellidos | !$email){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => 'Datos inválidos'
-            ];
-
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => 'Datos inválidos'];
             header('Location: ../views/usuario/editarPerfil.php');
             exit();
         }
 
-        $conexion = Conexion::Conectar();
+        $usuario = new Usuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
+        $mensaje = $usuario->editarUsuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
 
-        $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email WHERE id = :id";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellidos', $apellidos);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':id', $_SESSION['usuario']['id']);
-
-        
-        if($stmt->execute()){
-            $_SESSION['usuario']['nombre']=$nombre;
-            $_SESSION['usuario']['apellidos']=$apellidos;
-            $_SESSION['usuario']['email']=$email;
-
-            $_SESSION['mensaje']=[
-                'tipo'=>'success',
-                'contenido'=>'Perfil actualizado con éxito'
-            ];
-
-            header('Location: ../views/usuario/perfil.php');
-            exit();
-        }else{
-            $_SESSION['mensaje']= [
-                'tipo' => 'error',
-                'contenido' => 'Error al actualizar el perfil'
-            ];
-
-            header('Location: ../views/usuario/editarPerfil.php');
-            exit();
-        }
+        $_SESSION['mensaje'] = ['tipo' => 'success', 'contenido' => $mensaje];
+        header('Location: ../views/usuario/perfil.php');
+        exit();
     }
 
-    public function cambiarPassword(){
-        $usuario_id = $_SESSION['usuario']['id']; // ID del usuario logueado
-        $password_actual = $this->validarPassword($_POST['password_actual']);
-        $nueva_contraseña = $this->validarPassword($_POST['nueva_contraseña']);
-        $confirmar_contraseña = $this->validarPassword($_POST['confirmar_contraseña']);
-
-        if(empty($password_actual) || empty($nueva_contraseña) || empty($confirmar_contraseña)){
-            $_SESSION['mensaje'] = [
-                'tipo'=>'error',
-                'contenido' => 'Por favor, rellene todos los campos'
-            ];
-            header('Location: ../views/usuario/cambiarPassword.php');
-            exit();
-        }elseif($nueva_contraseña !== $confirmar_contraseña){
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => 'Las contraseñas no coindicen'
-            ];
-
-            header('Location: ../views/usuario/cambiarPassword.php');
-            exit();
-        }
-
-        //Verificar la contraseña actual
-        try {
-            $conexion = Conexion::Conectar();
-            $sql = "SELECT password FROM usuarios WHERE id = :id";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bindParam(':id', $usuario_id);
-            $stmt->execute();
-            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    public function cambiarPassword() {
+        // Verificar si se ha recibido la nueva contraseña
+        if (isset($_POST['id']) && isset($_POST['nueva_password']) && isset($_POST['confirmar_password'])) {
+            $id = $_POST['id'];
+            $nueva_password = $_POST['nueva_password'];
+            $confirmar_password = $_POST['confirmar_password'];
     
-            if (!$usuario || !password_verify($password_actual, $usuario['password'])) {
-                $_SESSION['mensaje'] = [
-                    'tipo'=>'error',
-                    'contenido'=>'La contraseña actual no es correcta'
-                ];
-                header('Location: ../views/usuario/cambiarPassword.php');
-                exit();
-            }
-
-            // Encriptar la nueva contraseña
-            $nueva_contraseña_encriptada = password_hash($nueva_contraseña, PASSWORD_BCRYPT);
-
-            $update_sql = "UPDATE usuarios SET password = :password WHERE id = :id";
-            $update_stmt = $conexion->prepare($update_sql);
-            $update_stmt->bindParam(':password', $nueva_contraseña_encriptada);
-            $update_stmt->bindParam(':id', $usuario_id);
-
-
-            if($update_stmt->execute()){
-                $_SESSION['mensaje']=[
-                    'tipo'=>'success',
-                    'contenido'=>'Contraseña cambiada'
-                ];
-                header('Location: ../views/usuario/perfil.php');
-                exit();
-            }else{
-                $_SESSION['mensaje'] = [
-                    'tipo'=>'error',
-                    'contenido'=>'Error al cambiar la contraseña'
-                ];
-            }
-        }catch(PDOException $error){
-            $_SESSION['mensaje'] = [
-                'tipo'=>'error',
-                'contenido'=> 'Error en la base de datos: ' . $error->getMessage()
-            ];
-            header('Location: ../views/usuario/cambiarPassword.php');
-            exit();
-        }
-    }
-
-    public function eliminarUsuario(){
-        if(isset($_POST['id'])){
-            $usuario_id = $_POST['id'];
-
-            try{
-                $conexion = Conexion::Conectar();
-                $sql = "DELETE FROM usuarios WHERE id = :id";
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
-    
-                if($stmt->execute()){
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'success',
-                        'contenido' => ' Usuario eliminado con éxito'
-                    ];
-                }else{
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'error',
-                        'contenido' => 'Hubo un problema al eliminar el usuario seleccionado'
-                    ];
-                }
-    
-                header('Location: ../views/admin/panelAdmin.php');
-                exit();
-            }catch(PDOException $error){
+            // Validar las contraseñas
+            if (empty($nueva_password) || empty($confirmar_password)) {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
-                    'contenido' => 'Error en la base de datos: ' . $error->getMessage()
+                    'contenido' => 'Las contraseñas no pueden estar vacías.'
                 ];
-    
-                header('Location: ../views/admin/panelAdmin.php');
+                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
                 exit();
             }
-        }else{
+    
+            if ($nueva_password !== $confirmar_password) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => 'Las contraseñas no coinciden.'
+                ];
+                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                exit();
+            }
+    
+            // Encriptar la nueva contraseña
+            $nueva_password_encriptada = password_hash($nueva_password, PASSWORD_BCRYPT);
+    
+            // Llamar al modelo para actualizar la contraseña
+            try {
+                $usuario = new Usuario($id);
+                if ($usuario->cambiarPassword($id, $nueva_password_encriptada)) {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'success',
+                        'contenido' => 'Contraseña actualizada correctamente.'
+                    ];
+                    header("Location: ../views/admin/panelAdmin.php");
+                    exit();
+                } else {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'error',
+                        'contenido' => 'Error al cambiar la contraseña.'
+                    ];
+                    header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                    exit();
+                }
+            } catch (PDOException $e) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => "Error en la base de datos: " . $e->getMessage()
+                ];
+                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                exit();
+            }
+        } else {
             $_SESSION['mensaje'] = [
                 'tipo' => 'error',
-                'contenido' => 'No se ha especificado el usuario a eliminar.'
+                'contenido' => 'Datos incompletos.'
             ];
-            header('Location: ../views/admin/panelAdmin.php');
+            header("Location: ../views/usuario/cambiarPassword.php");
+            exit();
+        }
+    }
+    
+
+    public function eliminarUsuario() {
+        // Verificar si se ha recibido el id del usuario a eliminar
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+    
+            // Llamar al modelo para eliminar el usuario
+            try {
+                $usuario = new Usuario($id);
+                if ($usuario->eliminarUsuario($id)) {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'success',
+                        'contenido' => 'Usuario eliminado correctamente.'
+                    ];
+                    header("Location: ../views/admin/panelAdmin.php");
+                    exit();
+                } else {
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'error',
+                        'contenido' => 'Error al eliminar el usuario.'
+                    ];
+                    header("Location: ../views/admin/panelAdmin.php");
+                    exit();
+                }
+            } catch (PDOException $e) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => "Error en la base de datos: " . $e->getMessage()
+                ];
+                header("Location: ../views/admin/panelAdmin.php");
+                exit();
+            }
+        } else {
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => 'ID de usuario no proporcionado.'
+            ];
+            header("Location: ../views/admin/panelAdmin.php");
             exit();
         }
     }
@@ -392,11 +281,8 @@ class UsuarioController{
         $nombre = trim($nombre);
         if(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $nombre)){
             return $nombre;
-        }else{
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "El nombre no es válido"
-            ];
+        } else {
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "El nombre no es válido"];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -406,11 +292,8 @@ class UsuarioController{
         $email = trim($email);
         if(filter_var($email, FILTER_VALIDATE_EMAIL)){
             return $email;
-        }else{
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => "El email no es válido"
-            ];
+        } else {
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "El email no es válido"];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
@@ -420,17 +303,12 @@ class UsuarioController{
         $password = trim($password);
         if(strlen($password) >= 8){
             return $password;
-        }else{
-            $_SESSION['mensaje'] = [
-                'tipo' => 'error',
-                'contenido' => 'La contraseña debe tener al menos 8 caracteres'
-            ];
+        } else {
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => 'La contraseña debe tener al menos 8 caracteres'];
             header('Location: ../views/usuario/formularioRegistro.php');
             exit();
         }
     }
-
 }
 
 new UsuarioController();
-?>
