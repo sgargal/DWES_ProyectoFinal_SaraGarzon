@@ -28,9 +28,9 @@ $usuarioLogueado = isset($_SESSION['usuario']); // Verifica si hay sesión activ
                     <li><a href="/proyectoFinal_SaraGarzon/app/views/carrito/carrito.php">
                         <i class="fa-solid fa-cart-shopping"></i> Carrito
                     </a></li>
-                    <li><a href="/proyectoFinal_SaraGarzon/app/views/usuario/perfil.php">Perfil</a></li>
+                    <li><a href="/proyectoFinal_SaraGarzon/app/views/usuario/perfil.php"><i class="fa fa-user"></i> Perfil</a></li>
                     <?php if ($_SESSION['usuario']['rol'] == 'admin'): ?>
-                        <li><a href="/proyectoFinal_SaraGarzon/app/views/admin/panelAdmin.php">Panel Admin</a></li>
+                        <li><a href="/proyectoFinal_SaraGarzon/app/views/admin/panelAdmin.php"><i class="fa fa-tools"></i> Panel Admin</a></li>
                     <?php endif; ?>
                 <?php endif; ?>
             </ul>
