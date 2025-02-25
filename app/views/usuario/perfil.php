@@ -3,6 +3,12 @@ session_start();
 
 $usuario = $_SESSION['usuario'];
 
+if(isset($_SESSION['mensaje'])){
+    $mensaje = $_SESSION['mensaje'];
+    $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+    echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
+    unset($_SESSION['mensaje']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

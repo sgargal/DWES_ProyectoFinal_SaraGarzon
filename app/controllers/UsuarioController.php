@@ -140,7 +140,7 @@ class UsuarioController{
     }
 
     public function editarUsuario(){
-        if (isset($_POST['editarUsuario'])) {
+        if (isset($_POST['action']) && $_POST['action'] == 'editarUsuario') {
             try {
                 $conexion = Conexion::Conectar();
     
@@ -185,7 +185,7 @@ class UsuarioController{
                         'tipo' => 'success',
                         'contenido' => 'Usuario actualizado correctamente'
                     ];
-                    header("Location: ../views/usuario/editarUsuario.php?id=$id");
+                    header("Location: ../views/admin/panelAdmin.php");
                     exit();
                 } else {
                     $_SESSION['mensaje'] = [

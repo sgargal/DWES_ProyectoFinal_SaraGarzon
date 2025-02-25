@@ -96,42 +96,6 @@ class Usuario{
         
     }
 
-    public function hacerAdmin($idUsuario){
-        try{
-            $conexion = Conexion::Conectar();
-
-            $sqlCheck = "SELECT rol FROM usuarios WHERE id = :id";
-            $stmtCheck = $conexion->prepare($sqlCheck);
-            $stmtCheck->bindParam(':id', $idUsuario);
-            $stmtCheck->execute();
-            $usuario = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-
-            //Compruebo que el usuario existe
-            if(!$usuario){
-                return "El usuario no existe";
-            }
-
-            //Compruebo que su rol no sea ya administrador
-            if($usuario['rol'] == 'admin'){
-                return "El usuario ya es administrador";
-            }
-           
-            //Actualizar el rol a admin
-            $sql = "UPDATE usuarios SET rol = 'admin' WHERE id = :id";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bindParam(':id', $idUsuario);
-
-            if (!$stmt->execute()) {
-                throw new Exception("Error al actualizar el rol del usuario");
-            }
-    
-            return "Usuario actualizado a administrador";
-
-        }catch(PDOException $error){
-            return "Error en la base de datos: " . $error->getMessage();
-        }
-    }
-
     public function editarUsuario($id, $nombre, $apellidos, $email, $password, $rol) {
         try {
             $conexion = Conexion::Conectar();

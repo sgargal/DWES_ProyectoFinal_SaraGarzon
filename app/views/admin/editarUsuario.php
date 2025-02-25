@@ -70,11 +70,11 @@ try{
 
             <label for="rol">Rol:</label>
             <select name="rol" id="rol">
-                <option value="usuario" <?= $usuario['rol'] == 'usuario' ? 'selected' : '' ?>>Usuario</option>
+                <option value="usuario" <?= $usuario['rol'] == 'user' ? 'selected' : '' ?>>Usuario</option>
                 <option value="admin" <?= $usuario['rol'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
             </select>
 
-            <button type="submit" name="editarUsuario">Guardar Cambios</button>
+            <input type="submit" name="action" value="editarUsuario"></input>
         </form>
     </div>
 </body>

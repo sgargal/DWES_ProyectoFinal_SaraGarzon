@@ -243,11 +243,12 @@ form input[type="submit"] {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    width: 90%;
 }
 
 form input[type="submit"]:hover {
     background-color: #3bcbaf;
-    transform: scale(1.05);
+    transform: scale(1);
 }
 
 
