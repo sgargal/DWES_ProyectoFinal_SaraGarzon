@@ -26,6 +26,8 @@ $resultado = $conex->query($query);
         <nav>
             <ul>
                 <li><a href="crearUsuario.php">Crear Usuario</a></li>
+                <li><a href="crearCategoria.php">Crear Categoria</a></li>
+                <li><a href="crearProducto.php">Crear Producto</a></li>
                 <li><a href="../../../public/index.php">Volver a inicio</a></li>
             </ul>
         </nav>
@@ -52,14 +54,18 @@ $resultado = $conex->query($query);
                             <td><?php echo htmlspecialchars($usuario['rol']); ?></td>
                             <td>
                                 <a href="editarUsuario.php?id=<?php echo $usuario['id']; ?>" class="btn-editar">Editar</a>
-                                <a href="eliminarUsuario.php?id=<?php echo $usuario['id']; ?>" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
+                                <a href="eliminarUsuario.php?id=<?php echo $usuario['id']; ?>" class="btn-eliminar" >Eliminar</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
-
     </main>
+    <footer>
+        <?php
+            include '../layout/footer.php';
+        ?>
+    </footer>
 </body>
 </html>

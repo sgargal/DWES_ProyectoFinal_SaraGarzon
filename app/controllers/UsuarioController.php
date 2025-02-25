@@ -33,6 +33,9 @@ class UsuarioController{
                     case 'cambiarPassword': 
                         $this->cambiarPassword();
                         break;
+                    case 'eliminarUsuario':
+                        $this->eliminarUsuario();
+                        break;
                     default:
                         echo 'Acción no reconocida';
                         break;
@@ -330,6 +333,49 @@ class UsuarioController{
                 'contenido'=> 'Error en la base de datos: ' . $error->getMessage()
             ];
             header('Location: ../views/usuario/cambiarPassword.php');
+            exit();
+        }
+    }
+
+    public function eliminarUsuario(){
+        if(isset($_POST['id'])){
+            $usuario_id = $_POST['id'];
+
+            try{
+                $conexion = Conexion::Conectar();
+                $sql = "DELETE FROM usuarios WHERE id = :id";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
+    
+                if($stmt->execute()){
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'success',
+                        'contenido' => ' Usuario eliminado con éxito'
+                    ];
+                }else{
+                    $_SESSION['mensaje'] = [
+                        'tipo' => 'error',
+                        'contenido' => 'Hubo un problema al eliminar el usuario seleccionado'
+                    ];
+                }
+    
+                header('Location: ../views/admin/panelAdmin.php');
+                exit();
+            }catch(PDOException $error){
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => 'Error en la base de datos: ' . $error->getMessage()
+                ];
+    
+                header('Location: ../views/admin/panelAdmin.php');
+                exit();
+            }
+        }else{
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => 'No se ha especificado el usuario a eliminar.'
+            ];
+            header('Location: ../views/admin/panelAdmin.php');
             exit();
         }
     }
