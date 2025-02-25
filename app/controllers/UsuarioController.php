@@ -27,6 +27,9 @@ class UsuarioController{
                     case 'editarUsuario':
                         $this->editarUsuario();
                         break;
+                    case 'editarPerfil':
+                        $this->editarPerfil();
+                        break;
                     default:
                         echo 'Acción no reconocida';
                         break;
@@ -203,6 +206,55 @@ class UsuarioController{
                 header("Location: ../views/usuario/editarUsuario.php?id=$id");
                 exit();
             }
+        }
+    }
+
+    public function editarPerfil(){
+        $nombre = $this->validarNombre($_POST['nombre']);
+        $apellidos = $this->validarNombre($_POST['apellidos']);
+        $email = $this->validarEmail($_POST['email']);
+
+        if(!$nombre | !$apellidos | !$email){
+            $_SESSION['mensaje'] = [
+                'tipo' => 'error',
+                'contenido' => 'Datos inválidos'
+            ];
+
+            header('Location: ../views/usuario/editarPerfil.php');
+            exit();
+        }
+
+        $conexion = Conexion::Conectar();
+
+        $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email WHERE id = :id";
+
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellidos', $apellidos);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':id', $_SESSION['usuario']['id']);
+
+        
+        if($stmt->execute()){
+            $_SESSION['usuario']['nombre']=$nombre;
+            $_SESSION['usuario']['apellidos']=$apellidos;
+            $_SESSION['usuario']['email']=$email;
+
+            $_SESSION['mensaje']=[
+                'tipo'=>'success',
+                'contenido'=>'Perfil actualizado con éxito'
+            ];
+
+            header('Location: ../views/usuario/perfil.php');
+            exit();
+        }else{
+            $_SESSION['mensaje']= [
+                'tipo' => 'error',
+                'contenido' => 'Error al actualizar el perfil'
+            ];
+
+            header('Location: ../views/usuario/editarPerfil.php');
+            exit();
         }
     }
     

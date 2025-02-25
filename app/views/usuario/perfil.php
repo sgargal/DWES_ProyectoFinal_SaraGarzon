@@ -2,13 +2,6 @@
 session_start();
 
 $usuario = $_SESSION['usuario'];
-
-if(isset($_SESSION['mensaje'])){
-    $mensaje = $_SESSION['mensaje'];
-    $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
-    echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
-    unset($_SESSION['mensaje']);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +21,14 @@ if(isset($_SESSION['mensaje'])){
         </nav>
     </header>
     <main>
+        <?php
+            if(isset($_SESSION['mensaje'])){
+                $mensaje = $_SESSION['mensaje'];
+                $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+                echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
+                unset($_SESSION['mensaje']);
+            }
+        ?>
         <div class="perfil-container">
             <h1>Bienvenido, <?php echo htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']); ?></h1>
 
