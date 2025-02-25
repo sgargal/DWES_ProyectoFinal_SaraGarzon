@@ -21,17 +21,18 @@ $usuario = $_SESSION['usuario'];
         </nav>
     </header>
     <main>
-        <?php
-            if(isset($_SESSION['mensaje'])){
-                $mensaje = $_SESSION['mensaje'];
-                $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
-                echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
-                unset($_SESSION['mensaje']);
-            }
-        ?>
+
         <div class="perfil-container">
             <h1>Bienvenido, <?php echo htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']); ?></h1>
 
+            <?php
+                if(isset($_SESSION['mensaje'])){
+                    $mensaje = $_SESSION['mensaje'];
+                    $clase = $mensaje['tipo'] == 'success' ? 'mensaje-exito' : 'mensaje-error';
+                    echo '<div class="' . $clase . '">' . $mensaje['contenido'] . '</div>';
+                    unset($_SESSION['mensaje']);
+                }
+            ?>
             <div class="perfil-info">
                 <h3>Correo electrónico asociado a la cuenta: </h3>
                 <p><strong>Email: </strong><?php echo htmlspecialchars($usuario['email']); ?></p>
@@ -53,5 +54,19 @@ $usuario = $_SESSION['usuario'];
         include '../layout/footer.php';
         ?>
     </footer>
+
+    <script>
+        // Espera 5 segundos y luego oculta el mensaje
+        setTimeout(function() {
+            var mensaje = document.querySelector('.mensaje-exito, .mensaje-error');
+            if (mensaje) {
+                mensaje.style.transition = "opacity 1s";
+                mensaje.style.opacity = "0";
+                setTimeout(function() {
+                    mensaje.style.display = "none";
+                }, 1000); // 1 segundo más para ocultarlo completamente
+            }
+        }, 2000);
+    </script>
 </body>
 </html>
