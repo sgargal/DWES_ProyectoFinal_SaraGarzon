@@ -129,6 +129,13 @@ class UsuarioController{
                 'tipo' => 'success',
                 'contenido' => "Inicio de sesión exitoso"
             ];
+
+            if(isset($_POST['recordarme'])){
+                setcookie('email_usuario', $email, time() +(7 * 24 * 60 * 60), "/");
+            }else{
+                setcookie('email_usuario', '', time() - 3600, "/");
+            }
+            
             header('Location: ../../public/index.php');
             exit();
         }else{

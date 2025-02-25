@@ -41,6 +41,11 @@
                 <label for="password">Contraseña: </label>
                 <input type="password" name="password" id="password" required>
 
+                <label>
+                    <input type="checkbox" name="recordarme" id="recordarme"
+                        <?php echo isset($_COOKIE['email_usuario']) ? 'checked' : ''?>> Recordarme durante los próximos 7 días
+                </label>
+                
                 <input type="submit" value="Iniciar Sesión">
             </form>
         </div>
