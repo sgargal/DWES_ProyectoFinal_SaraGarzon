@@ -70,7 +70,7 @@ try{
 
             <label for="rol">Rol:</label>
             <select name="rol" id="rol-select">
-                <option value="usuario" <?= $usuario['rol'] == 'user' ? 'selected' : '' ?>>Usuario</option>
+                <option value="user" <?= $usuario['rol'] == 'user' ? 'selected' : '' ?>>Usuario</option>
                 <option value="admin" <?= $usuario['rol'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
             </select>
 

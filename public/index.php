@@ -22,7 +22,7 @@
         <aside class="barraLateral">
             <h2>Categorías</h2>
             <ul>
-                <li><a href="">Nose</a></li>
+                <li><a href="">Tecnología</a></li>
                 <li><a href="">Nose tampoco</a></li>
                 <li><a href="">Nolose</a></li>
             </ul>
