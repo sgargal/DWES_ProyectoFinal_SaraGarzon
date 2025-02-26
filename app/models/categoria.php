@@ -2,12 +2,12 @@
 
 namespace Models;
 
+require_once __DIR__ . '/../../config/Conexion.php';
 use Config\Conexion;
 use PDO;
 
-class categoria{
+class Categoria{
     public static function obtenerCategorias(){
-
         $conex = Conexion::Conectar();
 
         // Consulta para obtener todas las categorías

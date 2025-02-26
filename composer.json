@@ -1,0 +1,17 @@
+{
+    "name": "sara/proyecto-final_sara-garzon",
+    "autoload": {
+        "psr-4": {
+            "Sara\\ProyectoFinalSaraGarzon\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sara Garzón",
+            "email": "saragarzongaldeano@gmail.com"
+        }
+    ],
+    "require": {
+        "pagerfanta/pagerfanta": "^4.7"
+    }
+}

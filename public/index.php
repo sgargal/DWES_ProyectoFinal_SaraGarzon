@@ -22,10 +22,21 @@
         <aside class="barraLateral">
             <h2>Categorías</h2>
             <ul>
-                <li><a href="">Tecnología</a></li>
-                <li><a href="">Nose tampoco</a></li>
-                <li><a href="">Nolose</a></li>
+                <?php
+                $sql = "SELECT id, nombre FROM categorias LIMIT 3";
+                $stmt = $conexion->prepare($sql);
+                $stmt->execute();
+                $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach($categorias as $categoria): ?>
+                <li>
+                    <a href="productos.php?categoria=<?=htmlspecialchars($categoria['id']) ?>">
+                        <?= htmlspecialchars($categoria['nombre']) ?>
+                    </a>
+                </li>
+                <?php endforeach; ?>
             </ul>
+            <a href="../app/views/categoria/categoria.php" class="ver-mas">Ver más</a>
         </aside>
 
         <section class="contenidoPrincipal">
@@ -35,14 +46,15 @@
                 echo '<h2>Bienvenido, ' .htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']) . '</h2>';
                 if($usuario['rol'] == 'admin'){
                     echo '<p>Aquí puedes gestionar la tienda</p>';
+                    echo '<form action="../app/controllers/UsuarioController.php" method="POST">
+                    <input type="hidden" name="action" value="cerrarSesion">
+                    <button type="submit">Cerrar sesión</button>
+                </form>';
 
                 }else{
                     echo '<p>Aquí puedes ver los productos de la tienda</p>';
+
                 }
-                echo '<form action="../app/controllers/UsuarioController.php" method="POST">
-                            <input type="hidden" name="action" value="cerrarSesion">
-                            <button type="submit">Cerrar sesión</button>
-                        </form>';
             }else{
                 echo '<h2>Bienvenido a la tienda online</h2>';
                 echo '<p>Regístrate o inicia sesión para hacer tu pedido</p>';
