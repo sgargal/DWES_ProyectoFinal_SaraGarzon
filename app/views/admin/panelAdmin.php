@@ -8,8 +8,8 @@ use Config\Conexion;
 $conex = Conexion::Conectar();
 
 //Obtener todos los usuarios
-$query = 'SELECT id, nombre, apellidos, email, rol FROM usuarios';
-$resultado = $conex->query($query);
+$sql = 'SELECT id, nombre, apellidos, email, rol FROM usuarios';
+$resultado = $conex->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -19,15 +19,16 @@ $resultado = $conex->query($query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <header class="header-form">
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
-                <li><a href="crearUsuario.php">Crear Usuario</a></li>
-                <li><a href="crearCategoria.php">Crear Categoria</a></li>
-                <li><a href="crearProducto.php">Crear Producto</a></li>
+                <li><a href="crearUsuario.php"><i class="fas fa-plus"></i> Crear Usuario</a></li>
+                <li><a href="../categoria/crearCategoria.php">Administrar Categorias</a></li>
+                <li><a href="crearProducto.php">Administrar Productos</a></li>
                 <li><a href="../../../public/index.php">Volver a inicio</a></li>
             </ul>
         </nav>

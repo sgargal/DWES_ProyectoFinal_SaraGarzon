@@ -21,5 +21,37 @@
             
             return $pagerfanta;
         }
+
+        public function crearCategoria($nombre){
+            if(empty($nombre)){
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => 'El nombre de la categoria no puede estar vacío'
+                ];
+                header('Location: ../views/categoria/crearCategoria.php');
+                exit();
+            }
+
+            $modeloCategoria = new Categoria();
+            $resultado = $modeloCategoria->crearCategoria($nombre);
+
+            if($resultado){
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'contenido' => 'Categoria creada correctamente'
+                ];
+
+                header('Location: ../views/categoria/crearCategoria.php');
+                exit();
+            }else{
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => 'Error al crear la categoria'
+                ];
+
+                header('Location: ../views/categoria/formCategoria.php');
+                exit();
+            }
+        }
     }
 ?>
