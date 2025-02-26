@@ -65,5 +65,10 @@ $categoriasPaginadas = $controller->obtenerCategoriasPaginadas($pagina);
             
         </section>
     </main>
+    <footer>
+        <?php
+        include '../layout/footer.php';
+        ?>
+    </footer>
 </body>
 </html>

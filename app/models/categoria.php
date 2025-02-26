@@ -31,4 +31,5 @@ class Categoria{
             die("Error al insertar una categoría: " . $error->getMessage());
         }
     }
+
 }
