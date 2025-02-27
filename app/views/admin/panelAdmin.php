@@ -28,7 +28,7 @@ $resultado = $conex->query($sql);
             <ul>
                 <li><a href="crearUsuario.php"><i class="fas fa-plus"></i> Crear Usuario</a></li>
                 <li><a href="../categoria/crearCategoria.php">Administrar Categorias</a></li>
-                <li><a href="crearProducto.php">Administrar Productos</a></li>
+                <li><a href="../producto/gestion.php">Administrar Productos</a></li>
                 <li><a href="../../../public/index.php">Volver a inicio</a></li>
             </ul>
         </nav>

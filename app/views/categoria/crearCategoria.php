@@ -23,6 +23,7 @@ $categoriasPaginadas = $controller->obtenerCategoriasPaginadas($pagina);
         <nav>
             <ul>
                 <li><a href="formCategoria.php"><i class="fas fa-plus"></i> Añadir</a></li>
+                <li><a href="editarCategoria.php"><i class="fas fa-pencil"></i> Editar</a></li>
                 <li><a href="../../views/admin/panelAdmin.php">Volver atrás</a></li>
             </ul>
         </nav>
