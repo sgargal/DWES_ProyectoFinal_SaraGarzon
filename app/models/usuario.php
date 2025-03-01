@@ -2,6 +2,7 @@
 namespace App\Models;
 use Config\Conexion;
 
+use PDO;
 use PDOException;
 use Exception;
 
@@ -12,6 +13,7 @@ class Usuario {
     private $email;
     private $password;
     private $rol;
+    private Conexion $db;
 
     public function __construct($id = null, $nombre = null, $apellidos = null, $email = null, $password = null, $rol = null){
         $this->id = $id;
@@ -23,12 +25,24 @@ class Usuario {
     }
 
     // Getters and setters
-    public function getId() { return $this->id; }
-    public function getNombre() { return $this->nombre; }
-    public function getApellidos() { return $this->apellidos; }
-    public function getEmail() { return $this->email; }
-    public function getPassword() { return $this->password; }
-    public function getRol() { return $this->rol; }
+    public function getId() { 
+        return $this->id; 
+    }
+    public function getNombre() { 
+        return $this->nombre; 
+    }
+    public function getApellidos() { 
+        return $this->apellidos; 
+    }
+    public function getEmail() {
+        return $this->email; 
+    }
+    public function getPassword() { 
+        return $this->password; 
+    }
+    public function getRol() { 
+        return $this->rol; 
+    }
 
     public function setId($id) { $this->id = $id; }
     public function setNombre($nombre) { $this->nombre = $nombre; }
@@ -40,10 +54,10 @@ class Usuario {
     // Método para registrar un usuario
     public function registro() {
         try {
-            $conexion = Conexion::Conectar();
+            $this->db = new Conexion();
             $sql = "INSERT INTO usuarios (nombre, apellidos, email, password, rol) 
                     VALUES (:nombre, :apellidos, :email, :password, :rol)";
-            $stmt = $conexion->prepare($sql);
+            $stmt = $this->db->Conectar()->prepare($sql);
             $passwordHash = password_hash($this->password, PASSWORD_BCRYPT);
             $stmt->bindParam(':nombre', $this->nombre);
             $stmt->bindParam(':apellidos', $this->apellidos);
@@ -51,20 +65,46 @@ class Usuario {
             $stmt->bindParam(':password', $passwordHash);
             $stmt->bindParam(':rol', $this->rol);
 
-            if ($stmt->execute()) {
+            $resultado = $stmt->execute();
+
+            $this->db->cerrarBD();
+            if ($resultado) {
                 return "Usuario registrado correctamente";
             } else {
                 return "Error al registrar el usuario";
             }
+            
         } catch (PDOException $error) {
             return "Error en la base de datos: " . $error->getMessage();
+        }
+    }
+
+    public function login($email, $password){
+        try{
+            $this->db = new Conexion(); // Establecer conexión con la base de datos
+
+            $sql = "SELECT * FROM usuarios WHERE email = :email";
+            $stmt = $this->db->Conectar()->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->db->cerrarBD(); 
+
+            if (!$usuario || !password_verify($password, $usuario['password'])) {
+                return false; // Usuario no encontrado o contraseña incorrecta
+            }
+
+            return $usuario;
+        } catch (PDOException $error) {
+            throw new Exception("Error en la base de datos: " . $error->getMessage());
         }
     }
 
     // Método para editar un usuario
     public function editarUsuario($id, $nombre, $apellidos, $email, $password, $rol) {
         try {
-            $conexion = Conexion::Conectar();
+            $this->db = new Conexion();
 
             if (!empty($password)) {
                 $passwordHash = password_hash($password, PASSWORD_BCRYPT);
@@ -77,7 +117,7 @@ class Usuario {
                         WHERE id = :id";
             }
 
-            $stmt = $conexion->prepare($sql);
+            $stmt = $this->db->Conectar()->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':apellidos', $apellidos);
@@ -88,7 +128,12 @@ class Usuario {
                 $stmt->bindParam(':password', $passwordHash);
             }
 
-            return $stmt->execute();  // Devuelve true si se actualizó correctamente
+            $resultado = $stmt->execute(); 
+
+            $this->db->cerrarBD();
+
+            return $resultado;  // Devuelve true si se actualizó correctamente
+
         } catch (PDOException $error) {
             throw new Exception("Error en la base de datos: " . $error->getMessage());
         }
@@ -97,7 +142,7 @@ class Usuario {
     // Método para cambiar la contraseña de un usuario
     public function cambiarPassword($id, $nueva_password) {
         try {
-            $conexion = Conexion::Conectar();
+            $this->db = new Conexion();
 
             // Encriptar la nueva contraseña
             $passwordHash = password_hash($nueva_password, PASSWORD_BCRYPT);
@@ -107,11 +152,15 @@ class Usuario {
                     SET password = :password 
                     WHERE id = :id";
             
-            $stmt = $conexion->prepare($sql);
+            $stmt = $this->db->Conectar()->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':password', $passwordHash);
 
-            return $stmt->execute();  // Devuelve true si se actualizó correctamente
+            $resultado = $stmt->execute();
+
+            $this->db->cerrarBD();
+
+            return $resultado;  // Devuelve true si se actualizó correctamente
         } catch (PDOException $error) {
             throw new Exception("Error en la base de datos: " . $error->getMessage());
         }
@@ -120,15 +169,19 @@ class Usuario {
     // Método para eliminar un usuario
     public function eliminarUsuario($id) {
         try {
-            $conexion = Conexion::Conectar();
+            $this->db = new Conexion();
 
             // Eliminar el usuario
             $sql = "DELETE FROM usuarios WHERE id = :id";
             
-            $stmt = $conexion->prepare($sql);
+            $stmt = $this->db->Conectar()->prepare($sql);
             $stmt->bindParam(':id', $id);
 
-            return $stmt->execute();  // Devuelve true si se eliminó correctamente
+            $resultado = $stmt->execute();
+
+            $this->db->cerrarBD();
+
+            return $resultado;  // Devuelve true si se eliminó correctamente
         } catch (PDOException $error) {
             throw new Exception("Error en la base de datos: " . $error->getMessage());
         }

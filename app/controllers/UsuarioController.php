@@ -1,13 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use PDO;
-use PDOException;
-require_once('../models/usuario.php');
 use App\Models\Usuario; // Importa el modelo Usuario
 
-require_once('../../config/Conexion.php');
-use Config\Conexion;
 
 class UsuarioController{
     public function __construct() {
@@ -76,15 +71,11 @@ class UsuarioController{
             exit();
         }
 
-        $conexion = Conexion::Conectar();
-        $sql = "SELECT * FROM usuarios WHERE email = :email";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        $usuarioModel = new Usuario();
+        $usuario = $usuarioModel->login($email, $password);
 
-        if(!$usuario || !password_verify($password, $usuario['password'])){
-            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "Contraseña incorrecta"];
+        if(!$usuario){
+            $_SESSION['mensaje'] = ['tipo' => 'error', 'contenido' => "Credenciales incorrectas"];
             header('Location: ../views/usuario/formularioLogin.php');
             exit();
         }
@@ -121,28 +112,18 @@ class UsuarioController{
         }
     
         // Llamamos al modelo Usuario para actualizar el usuario
-        try {
-            $usuario = new Usuario($id, $nombre, $apellidos, $email, $password, $rol); // Creando un objeto Usuario con los datos
-            if ($usuario->editarUsuario($id, $nombre, $apellidos, $email, $password, $rol)) {
-                $_SESSION['mensaje'] = [
-                    'tipo' => 'success',
-                    'contenido' => 'Usuario actualizado correctamente'
-                ];
-                header("Location: ../views/admin/panelAdmin.php");
-                exit();
-            } else {
-                $_SESSION['mensaje'] = [
-                    'tipo' => 'error',
-                    'contenido' => 'Error al actualizar el usuario'
-                ];
-                header("Location: ../views/usuario/editarUsuario.php?id=$id");
-                exit();
-            }
-        } catch (PDOException $e) {
-            // En caso de error en la base de datos o en el proceso
+        $usuario = new Usuario($id, $nombre, $apellidos, $email, $password, $rol); // Creando un objeto Usuario con los datos
+        if ($usuario->editarUsuario($id, $nombre, $apellidos, $email, $password, $rol)) {
+            $_SESSION['mensaje'] = [
+                'tipo' => 'success',
+                'contenido' => 'Usuario actualizado correctamente'
+            ];
+            header("Location: ../views/admin/panelAdmin.php");
+            exit();
+        } else {
             $_SESSION['mensaje'] = [
                 'tipo' => 'error',
-                'contenido' => "Error en la base de datos: " . $e->getMessage()
+                'contenido' => 'Error al actualizar el usuario'
             ];
             header("Location: ../views/usuario/editarUsuario.php?id=$id");
             exit();
@@ -164,7 +145,10 @@ class UsuarioController{
         $usuario = new Usuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
         $mensaje = $usuario->editarUsuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
 
-        $_SESSION['mensaje'] = ['tipo' => 'success', 'contenido' => $mensaje];
+        $_SESSION['mensaje'] = [
+            'tipo' => 'success', 
+            'contenido' => $mensaje
+        ];
         header('Location: ../views/usuario/perfil.php');
         exit();
     }
@@ -199,27 +183,18 @@ class UsuarioController{
             $nueva_password_encriptada = password_hash($nueva_password, PASSWORD_BCRYPT);
     
             // Llamar al modelo para actualizar la contraseña
-            try {
-                $usuario = new Usuario($id);
-                if ($usuario->cambiarPassword($id, $nueva_password_encriptada)) {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'success',
-                        'contenido' => 'Contraseña actualizada correctamente.'
-                    ];
-                    header("Location: ../views/admin/panelAdmin.php");
-                    exit();
-                } else {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'error',
-                        'contenido' => 'Error al cambiar la contraseña.'
-                    ];
-                    header("Location: ../views/usuario/cambiarPassword.php?id=$id");
-                    exit();
-                }
-            } catch (PDOException $e) {
+            $usuario = new Usuario($id);
+            if ($usuario->cambiarPassword($id, $nueva_password_encriptada)) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'contenido' => 'Contraseña actualizada correctamente.'
+                ];
+                header("Location: ../views/admin/panelAdmin.php");
+                exit();
+            } else {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
-                    'contenido' => "Error en la base de datos: " . $e->getMessage()
+                    'contenido' => 'Error al cambiar la contraseña.'
                 ];
                 header("Location: ../views/usuario/cambiarPassword.php?id=$id");
                 exit();
@@ -241,27 +216,18 @@ class UsuarioController{
             $id = $_POST['id'];
     
             // Llamar al modelo para eliminar el usuario
-            try {
-                $usuario = new Usuario($id);
-                if ($usuario->eliminarUsuario($id)) {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'success',
-                        'contenido' => 'Usuario eliminado correctamente.'
-                    ];
-                    header("Location: ../views/admin/panelAdmin.php");
-                    exit();
-                } else {
-                    $_SESSION['mensaje'] = [
-                        'tipo' => 'error',
-                        'contenido' => 'Error al eliminar el usuario.'
-                    ];
-                    header("Location: ../views/admin/panelAdmin.php");
-                    exit();
-                }
-            } catch (PDOException $e) {
+            $usuario = new Usuario($id);
+            if ($usuario->eliminarUsuario($id)) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'contenido' => 'Usuario eliminado correctamente.'
+                ];
+                header("Location: ../views/admin/panelAdmin.php");
+                exit();
+            } else {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
-                    'contenido' => "Error en la base de datos: " . $e->getMessage()
+                    'contenido' => 'Error al eliminar el usuario.'
                 ];
                 header("Location: ../views/admin/panelAdmin.php");
                 exit();
