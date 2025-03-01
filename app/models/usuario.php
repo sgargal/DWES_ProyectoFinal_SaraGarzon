@@ -2,6 +2,8 @@
 namespace App\Models;
 use Config\Conexion;
 
+require_once __DIR__ . '/../../config/Conexion.php';
+
 use PDO;
 use PDOException;
 use Exception;
@@ -15,8 +17,8 @@ class Usuario {
     private $rol;
     private Conexion $db;
 
-    public function __construct($id = null, $nombre = null, $apellidos = null, $email = null, $password = null, $rol = null){
-        $this->id = $id;
+    public function __construct($id = null, $nombre, $apellidos, $email, $password, $rol) {
+        $this->id = $id;  // Si es null, se gestionará como AUTO_INCREMENT
         $this->nombre = $nombre;
         $this->apellidos = $apellidos;
         $this->email = $email;
@@ -24,32 +26,6 @@ class Usuario {
         $this->rol = $rol;
     }
 
-    // Getters and setters
-    public function getId() { 
-        return $this->id; 
-    }
-    public function getNombre() { 
-        return $this->nombre; 
-    }
-    public function getApellidos() { 
-        return $this->apellidos; 
-    }
-    public function getEmail() {
-        return $this->email; 
-    }
-    public function getPassword() { 
-        return $this->password; 
-    }
-    public function getRol() { 
-        return $this->rol; 
-    }
-
-    public function setId($id) { $this->id = $id; }
-    public function setNombre($nombre) { $this->nombre = $nombre; }
-    public function setApellidos($apellidos) { $this->apellidos = $apellidos; }
-    public function setEmail($email) { $this->email = $email; }
-    public function setPassword($password) { $this->password = $password; }
-    public function setRol($rol) { $this->rol = $rol; }
 
     // Método para registrar un usuario
     public function registro() {
@@ -59,6 +35,7 @@ class Usuario {
                     VALUES (:nombre, :apellidos, :email, :password, :rol)";
             $stmt = $this->db->Conectar()->prepare($sql);
             $passwordHash = password_hash($this->password, PASSWORD_BCRYPT);
+
             $stmt->bindParam(':nombre', $this->nombre);
             $stmt->bindParam(':apellidos', $this->apellidos);
             $stmt->bindParam(':email', $this->email);
@@ -132,7 +109,11 @@ class Usuario {
 
             $this->db->cerrarBD();
 
-            return $resultado;  // Devuelve true si se actualizó correctamente
+            if($resultado){
+                return "Perfil actualizado correctamente.";
+            } else {
+                return "No se pudo actualizar el perfil";
+            }
 
         } catch (PDOException $error) {
             throw new Exception("Error en la base de datos: " . $error->getMessage());
@@ -186,5 +167,37 @@ class Usuario {
             throw new Exception("Error en la base de datos: " . $error->getMessage());
         }
     }
+
+    public function obtenerUsuarioPorId($id) {
+        try {
+            // Conectar a la base de datos
+            $this->db = new Conexion();
+            
+            // Consulta SQL para obtener los datos del usuario por su ID
+            $sql = "SELECT * FROM usuarios WHERE id = :id";
+            
+            // Preparar la consulta
+            $stmt = $this->db->Conectar()->prepare($sql);
+            
+            // Vincular el parámetro :id con el valor pasado
+            $stmt->bindParam(':id', $id);
+            
+            // Ejecutar la consulta
+            $stmt->execute();
+            
+            // Obtener el resultado de la consulta
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Cerrar la conexión
+            $this->db->cerrarBD();
+            
+            // Si se encontró el usuario, devolverlo, sino, devolver null
+            return $usuario ? $usuario : null;
+        } catch (PDOException $error) {
+            // En caso de error en la consulta, lanzamos una excepción
+            throw new Exception("Error al obtener usuario: " . $error->getMessage());
+        }
+    }
+    
 }
 ?>

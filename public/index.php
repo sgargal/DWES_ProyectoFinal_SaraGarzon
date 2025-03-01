@@ -16,7 +16,7 @@
 
     use Config\Conexion;
 
-    $conexion = Conexion::Conectar();
+    $db = new Conexion();
     ?>
     <main>
         <aside class="barraLateral">
@@ -24,7 +24,7 @@
             <ul>
                 <?php
                 $sql = "SELECT id, nombre FROM categorias LIMIT 3";
-                $stmt = $conexion->prepare($sql);
+                $stmt = $db->Conectar()->prepare($sql);
                 $stmt->execute();
                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

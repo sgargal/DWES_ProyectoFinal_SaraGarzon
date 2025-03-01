@@ -17,9 +17,9 @@ $usuario_id = $_GET['id'];
 
 // (esto es para mostrar información del usuario que será eliminado)
 try {
-    $conexion = Conexion::Conectar();
+    $db = new Conexion();
     $sql = "SELECT nombre FROM usuarios WHERE id = :id";
-    $stmt = $conexion->prepare($sql);
+    $stmt = $db->Conectar()->prepare($sql);
     $stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);

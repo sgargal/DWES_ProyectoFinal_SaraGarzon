@@ -1,19 +1,18 @@
 <?php
-namespace Models;
-
-require_once __DIR__ . '/../../config/Conexion.php';
-
+namespace App\Models;
 use Config\Conexion;
 use PDO;
 use PDOException;
 
 class Producto{
+    private Conexion $db;
+
     public function obtenerProductos(){
         try{
-            $conex = Conexion::Conectar();
+            $this->db = new Conexion();
             $sql = "SELECT p.*, c.nombre AS categoria FROM productos p 
                       JOIN categorias c ON p.categoria_id = c.id";
-            $stmt = $conex->query($sql);
+            $stmt = $this->db->Conectar()->query($sql);
             $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (empty($productos)) {
@@ -27,12 +26,13 @@ class Producto{
     }
 
     public function crearProducto($nombre, $descripcion, $precio, $stock, $categoria_id, $imagen){
-        $conex = Conexion::Conectar();
+        
         
         try{
+            $this->db = new Conexion();
             $sql = "INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id, imagen) 
                       VALUES (:nombre, :descripcion, :precio, :stock, :categoria_id, :imagen)";
-            $stmt = $conex->prepare($sql);
+            $stmt = $this->db->Conectar()->prepare($sql);
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':precio', $precio);

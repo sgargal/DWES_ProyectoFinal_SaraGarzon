@@ -15,11 +15,11 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $idUsuario = $_GET['id'];
 
 try{
-    $conexion = Conexion::Conectar();
+    $db = new Conexion();
 
     // Consulta para obtener los datos actuales del usuario
     $sql = "SELECT * FROM usuarios WHERE id = :id";
-    $stmt = $conexion->prepare($sql);
+    $stmt = $db->Conectar()->prepare($sql);
     $stmt->bindParam(':id', $idUsuario);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
