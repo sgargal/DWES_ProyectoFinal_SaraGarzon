@@ -34,13 +34,18 @@ class Categoria{
 
             // Consulta para obtener todas las categorías
             $sql = "SELECT * FROM categorias";
-            $stmt = $this->db->Conectar()->prepare($sql);
-            $stmt->execute();
+            $stmt = $this->db->Conectar()->query($sql);
+            $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($categorias)) {
+                return [];
+            }
+
+            return $categorias;
         }catch(PDOException $error){
-            return "Error en la base de datos: " . $error->getMessage();
+            echo "Error en la base de datos: " . $error->getMessage();
+            return [];
         }
         
     }

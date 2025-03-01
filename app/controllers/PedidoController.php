@@ -3,7 +3,7 @@ namespace Controllers;
 
 require_once __DIR__ . '/../models/Producto.php';
 
-use Models\Producto;
+use App\Models\Producto;
 
 class PedidosController {
     public function gestion(){

@@ -1,16 +1,16 @@
 <?php
-require_once 'CategoriaController.php';
+require_once 'ProductoController.php';
 session_start();
 
-use Controllers\CategoriaController;
+use Controllers\ProductoController;
 
-$categoriaController = new CategoriaController();
+$productoController = new ProductoController();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
-            case 'crearCategoria':
-                $categoriaController->crearCategoria($_POST['nombre']);
+            case 'guardar':
+                $productoController->guardar();
                 break;
             default:
                 echo "Acción no reconocida";

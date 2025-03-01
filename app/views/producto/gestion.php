@@ -27,42 +27,44 @@ $productos = $productoController->gestion();
             </ul>
         </nav>
     </header>
-    <main class="mostrarProductos">
-        <h1>Productos disponibles</h1>
-        <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Categoría</th>
-                <th>Imagen</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if(!empty($productos) && is_array($productos)):?>
-                <?php foreach($productos as $producto): ?>
-                    <tr>
-                        <td><?= $producto['id'] ?></td>
-                        <td><?= $producto['nombre'] ?></td>
-                        <td><?= $producto['descripcion'] ?></td>
-                        <td><?= $producto['precio'] ?></td>
-                        <td><?= $producto['stock'] ?></td>
-                        <td><?= $producto['categoria'] ?></td>
-                        <td>
-                            <img src="../../../src/<?= $producto['imagen'] ?>" width="50" height="50" alt="Imagen">
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <main>
+        <div class="admin-container">
+            <h1>Productos disponibles</h1>
+            <table>
+            <thead>
                 <tr>
-                    <td colspan="7">No se encontraron productos disponibles.</td>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Imagen</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if(!empty($productos) && is_array($productos)):?>
+                    <?php foreach($productos as $producto): ?>
+                        <tr>
+                            <td><?= $producto['id'] ?></td>
+                            <td><?= $producto['nombre'] ?></td>
+                            <td><?= $producto['descripcion'] ?></td>
+                            <td><?= $producto['precio'] ?></td>
+                            <td><?= $producto['stock'] ?></td>
+                            <td><?= $producto['categoria'] ?></td>
+                            <td>
+                                <img src="../../../src/<?= $producto['imagen'] ?>" width="50" height="50" alt="Imagen">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7">No se encontraron productos disponibles.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+            </table>
+        </div>
     </main>
     <footer>
         <?php

@@ -1,3 +1,13 @@
+<?php 
+session_start(); 
+
+require_once __DIR__ . '/../../models/Categoria.php';
+
+use App\Models\Categoria;
+
+$categoriaModel = new Categoria();
+$categorias = $categoriaModel->obtenerCategorias();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +21,7 @@
         <h1>Crear Producto</h1>
         <nav>
             <ul>
-                <li><a href="../../../public/index.php">Volver atrás</a></li>
+                <li><a href="../producto/gestion.php">Volver atrás</a></li>
             </ul>
         </nav>
     </header>
@@ -24,7 +34,8 @@
                 <?php unset($_SESSION['mensaje']); ?>
             <?php endif; ?>
             
-            <form action="../../controllers/ProductoController.php?action=guardar" method="POST">
+            <form action="../../controllers/procesarProducto.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="guardar"> 
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" required>
 
@@ -39,9 +50,15 @@
 
                 <label for="categoria_id">Categoría:</label>
                 <select name="categoria_id">
-                    <?php foreach($categorias as $categoria): ?>
-                        <option value="<?= $categoria['id'] ?>"><?= $categoria['nombre'] ?></option>
-                    <?php endforeach; ?>
+                    <?php if (!empty($categorias)): ?>
+                        <?php foreach($categorias as $categoria): ?>
+                            <option value="<?= htmlspecialchars($categoria['id']) ?>">
+                                <?= htmlspecialchars($categoria['nombre']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="">No hay categorías disponibles</option>
+                    <?php endif; ?>
                 </select>
 
                 <label for="imagen">Imagen:</label>

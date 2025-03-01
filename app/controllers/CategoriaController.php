@@ -1,7 +1,7 @@
 <?php
     namespace Controllers;
 
-    require_once __DIR__ . '/../models/Categoria.php'; // Ensure this path is correct
+    require_once __DIR__ . '/../models/Categoria.php'; 
     require_once __DIR__ . '/../../vendor/autoload.php';
 
 

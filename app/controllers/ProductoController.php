@@ -4,13 +4,16 @@
     require_once __DIR__. '/../models/Producto.php';
     require_once __DIR__. '/../models/Categoria.php';
 
-    use Models\Producto;
-    use Models\Categoria;
+    use App\Models\Producto;
+    use App\Models\Categoria;
 
     class ProductoController{
+        public function __construct() {
+            session_start();
+        }
+
         public function crear(){
             session_start();
-
             // Verificar si el usuario es administrador
             if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
                 $_SESSION['mensaje'] = [
@@ -22,9 +25,11 @@
             }
 
             $categoriaModel = new Categoria();
-            $categorias = $categoriaModel->obtenerCategorias();
+            $_SESSION['categorias'] = $categoriaModel->obtenerCategorias();
 
-            require_once __DIR__. '/../views/producto/crear.php';
+            // Redirigir a la vista
+            header('Location: ../views/producto/crear.php');
+            exit();
         }
 
         public function guardar(){
