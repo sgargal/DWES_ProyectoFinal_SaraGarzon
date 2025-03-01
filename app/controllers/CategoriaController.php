@@ -1,13 +1,13 @@
 <?php
     namespace Controllers;
 
-    require_once __DIR__ . '/../models/Categoria.php';
+    require_once __DIR__ . '/../models/Categoria.php'; // Ensure this path is correct
     require_once __DIR__ . '/../../vendor/autoload.php';
 
 
     use Pagerfanta\Pagerfanta;
     use Pagerfanta\Adapter\ArrayAdapter;
-    use Models\Categoria;
+    use App\Models\Categoria;
 
     class CategoriaController{
         public function obtenerCategoriasPaginadas($pagina, $limite = 5){

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+require_once __DIR__ . '/../../config/Conexion.php';
 use Config\Conexion;
 use PDO;
 use PDOException;
