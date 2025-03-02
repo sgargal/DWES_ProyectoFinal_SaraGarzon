@@ -46,11 +46,6 @@
                 echo '<h2>Bienvenido, ' . htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']) . '</h2>';
                
             ?>
-                
-                <form action="../app/controllers/UsuarioController.php" method="POST">
-                    <input type="hidden" name="action" value="cerrarSesion">
-                    <button type="submit">Cerrar sesión</button>
-                </form>
             <?php }  
              $sqlProductos = "SELECT id, nombre, descripcion, precio, imagen FROM productos";
              $stmtProductos = $db->Conectar()->prepare($sqlProductos);
