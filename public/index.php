@@ -30,11 +30,12 @@
                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach($categorias as $categoria): ?>
-                <li>
-                    <a href="../app/views/producto/productos.php?=htmlspecialchars($categoria['id']) ?>">
-                        <?= htmlspecialchars($categoria['nombre']) ?>
-                    </a>
-                </li>
+                    <li>
+                        <!-- Corrige la URL -->
+                        <a href="../app/views/producto/productos.php?categoria=<?= htmlspecialchars($categoria['id']) ?>">
+                            <?= htmlspecialchars($categoria['nombre']) ?>
+                        </a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
             <a href="../app/views/categoria/categoria.php" class="ver-mas">Ver más</a>

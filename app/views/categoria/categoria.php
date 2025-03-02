@@ -30,7 +30,7 @@ $categoriasPaginadas = $controller->obtenerCategoriasPaginadas($pagina);
             <ul>
                 <?php foreach ($categoriasPaginadas->getCurrentPageResults() as $categoria): ?>
                     <li>
-                        <a href="productos.php?categoria=<?= htmlspecialchars($categoria['id']) ?>">
+                        <a href="../producto/productos.php?categoria=<?= htmlspecialchars($categoria['id']) ?>">
                             <?= htmlspecialchars($categoria['nombre']) ?>
                             <i class="fa fa-arrow-right"></i>
                         </a>

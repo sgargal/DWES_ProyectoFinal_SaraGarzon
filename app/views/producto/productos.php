@@ -19,7 +19,7 @@ $productos = $categoria_id ? $productoModel->obtenerProductosPorCategoria($categ
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
-    <header>
+    <header class="header-form">
         <h1>Productos de la Categoria</h1>
         <nav>
             <ul>
@@ -28,22 +28,28 @@ $productos = $categoria_id ? $productoModel->obtenerProductosPorCategoria($categ
         </nav>
     </header>
     <main>
-        <div class="productos-container">
+        <div class= "contenidoPrincipal">
             <?php if(!empty($productos)): ?>
-                <?php foreach ($productos as $producto): ?>
-                    <div class="producto-card">
-                        <h2><?= htmlspecialchars($producto['nombre']) ?></h2>
-                        <p><?= htmlspecialchars($producto['descripcion']) ?></p>
-                        <p><strong>Precio:</strong> $<?= htmlspecialchars($producto['precio']) ?></p>
-                        <p><strong>Stock:</strong> <?= htmlspecialchars($producto['stock']) ?></p>
-                        <img src="../../../src/?= htmlspecialchars($producto['imagen']) ?>" alt="Imagen de <?= htmlspecialchars($producto['nombre']) ?>">
-                        <p>Fecha de creación: <?= date('d/m/Y H:i', strtotime($producto['fecha'])) ?></p>
-                    </div>
-                    <?php endforeach; ?>
-            <?php else: ?>
-                <p>No hay productos en esta categoría.</p>
-            <?php endif; ?>
+                <div class="productos">
+                        <?php foreach ($productos as $producto): ?>
+                            <div class="producto">
+                                <h2><?= htmlspecialchars($producto['nombre']) ?></h2>
+                                <p><?= htmlspecialchars($producto['descripcion']) ?></p>
+                                <p><strong>Precio:</strong> <?= htmlspecialchars($producto['precio']) ?> €</p>
+                                <p><strong>Stock:</strong> <?= htmlspecialchars($producto['stock']) ?></p>
+                                <img src="../../../src/<?= htmlspecialchars($producto['imagen']) ?>" alt="Imagen de <?= htmlspecialchars($producto['nombre']) ?>" width="135" height="140">
+                            </div>
+                            <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No hay productos en esta categoría.</p>
+                </div>
+            <?php endif; ?> 
         </div>
     </main>
+    <footer>
+        <?php
+        include '../layout/footer.php';
+        ?>
+    </footer>
 </body>
 </html>
