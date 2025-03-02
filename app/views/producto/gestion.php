@@ -40,6 +40,7 @@ $productos = $productoController->gestion();
                     <th>Stock</th>
                     <th>Categoría</th>
                     <th>Imagen</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,11 @@ $productos = $productoController->gestion();
                             <td><?= $producto['stock'] ?></td>
                             <td><?= $producto['categoria'] ?></td>
                             <td>
-                                <img src="../../../src/<?= $producto['imagen'] ?>" width="50" height="50" alt="Imagen">
+                                <img src="../../../src/<?= $producto['imagen'] ?>" width="80" height="90" alt="Imagen">
+                            </td>
+                            <td>
+                                <a href="editarProducto.php?id=<?php echo $producto['id']; ?>" class="btn-editar">Editar</a>
+                                <a href="eliminarProducto.php?id=<?php echo $producto['id']; ?>" class="btn-eliminar" >Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

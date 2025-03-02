@@ -16,6 +16,10 @@ class Producto{
     private $imagen;
     private Conexion $db;
 
+    public function __construct() {
+        $this->db = new Conexion();
+    }
+
     // Getter y Setter para $id
     public function getId() {
         return $this->id;
@@ -99,7 +103,6 @@ class Producto{
 
     public function obtenerProductos(){
         try{
-            $this->db = new Conexion();
             $sql = "SELECT p.*, c.nombre AS categoria FROM productos p 
                       JOIN categorias c ON p.categoria_id = c.id";
             $stmt = $this->db->Conectar()->query($sql);
@@ -117,7 +120,6 @@ class Producto{
 
     public function crearProducto($nombre, $descripcion, $precio, $stock, $categoria_id, $imagen){
         try{
-            $this->db = new Conexion();
             $sql = "INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id, imagen) 
                       VALUES (:nombre, :descripcion, :precio, :stock, :categoria_id, :imagen)";
             $stmt = $this->db->Conectar()->prepare($sql);
@@ -130,6 +132,68 @@ class Producto{
             return $stmt->execute();
         }catch(PDOException $error){
             return false;
+        }
+    }
+
+    public function obtenerProductoPorId($id){
+        try {
+            // Preparamos la consulta SQL para obtener un producto por su ID
+            $query = "SELECT * FROM productos WHERE id = :id LIMIT 1";
+            
+            // Preparamos la declaración
+            $stmt = $this->db->Conectar()->prepare($query);
+            
+            // Vinculamos el parámetro :id a la variable $id
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            
+            // Ejecutamos la consulta
+            $stmt->execute();
+            
+            // Recuperamos el resultado
+            $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Verificamos si se encontró el producto
+            if ($producto) {
+                return $producto;
+            } else {
+                // Si no se encuentra, podrías devolver null o lanzar una excepción
+                return null;
+            }
+        } catch (PDOException $e) {
+            // Manejo de errores
+            die("Error al obtener el producto: " . $e->getMessage());
+        }
+    }
+    
+    public function obtenerProductosPorCategoria($categoria_id){
+        $sql = "SELECT * FROM productos WHERE categoria_id = ?";
+        $stmt = $this->db->Conectar()->prepare($sql);
+        $stmt->execute([$categoria_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function editar($id, $nombre, $descripcion, $precio, $stock, $categoria_id, $imagen){
+        try{
+            $sql = "UPDATE productos SET
+                    nombre = :nombre,
+                    descripcion = :descripcion,
+                    precio = :precio,
+                    stock = :stock,
+                    categoria_id = :categoria_id,
+                    imagen = :imagen
+                    WHERE id = :id";
+            $stmt = $this->db->Conectar()->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':precio', $precio);
+            $stmt->bindParam(':stock', $stock);
+            $stmt->bindParam(':categoria_id', $categoria_id);
+            $stmt->bindParam(':imagen', $imagen);
+
+            return $stmt->execute();
+        }catch(PDOException $error){
+            die("Error en la base de datos: " . $error->getMessage());
         }
     }
 

@@ -41,7 +41,7 @@ try{
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
-<header class="header-form">
+    <header class="header-form">
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
@@ -49,33 +49,40 @@ try{
             </ul>
         </nav>
     </header>
-    <div class="admin-container">
-        <h2>Editar Usuario</h2>
+    <main>
+        <div class="admin-container">
+            <h2>Editar Usuario</h2>
 
 
-        <form action="../../controllers/UsuarioController.php" method="POST">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($usuario['id']) ?>">
+            <form action="../../controllers/UsuarioController.php" method="POST">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($usuario['id']) ?>">
 
-            <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
 
-            <label for="apellidos">Apellidos:</label>
-            <input type="text" name="apellidos" value="<?= htmlspecialchars($usuario['apellidos']) ?>" required>
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" name="apellidos" value="<?= htmlspecialchars($usuario['apellidos']) ?>" required>
 
-            <label for="email">Correo Electrónico:</label>
-            <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required>
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required>
 
-            <label for="password">Nueva Contraseña (opcional):</label>
-            <input type="password" name="password">
+                <label for="password">Nueva Contraseña (opcional):</label>
+                <input type="password" name="password">
 
-            <label for="rol">Rol:</label>
-            <select name="rol" id="rol-select">
-                <option value="user" <?= $usuario['rol'] == 'user' ? 'selected' : '' ?>>Usuario</option>
-                <option value="admin" <?= $usuario['rol'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
-            </select>
+                <label for="rol">Rol:</label>
+                <select name="rol" id="rol-select">
+                    <option value="user" <?= $usuario['rol'] == 'user' ? 'selected' : '' ?>>Usuario</option>
+                    <option value="admin" <?= $usuario['rol'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
+                </select>
 
-            <input type="submit" name="action" value="editarUsuario"></input>
-        </form>
-    </div>
+                <input type="submit" name="action" value="editarUsuario"></input>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <?php
+        include '../layout/footer.php';
+        ?>
+    </footer>
 </body>
 </html>

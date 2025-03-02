@@ -12,6 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             case 'guardar':
                 $productoController->guardar();
                 break;
+            case 'editar':
+                $productoController->editar();
+                break;
             default:
                 echo "Acción no reconocida";
         }

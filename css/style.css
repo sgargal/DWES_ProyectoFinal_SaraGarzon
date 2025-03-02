@@ -225,19 +225,47 @@ main {
 
 /* --- CONTENIDO PRINCIPAL --- */
 .contenidoPrincipal {
-    flex: 1;  /* Esto hace que el contenido ocupe el espacio restante */
+    flex: 1;  /* Hace que el contenido ocupe el espacio restante */
     padding: 20px;
     font-size: 1.2rem;
+    background-color: #fff;  /* Fondo blanco para resaltar el contenido */
+    border-radius: 8px;  /* Bordes redondeados para un diseño más suave */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  /* Sombra sutil para darle profundidad */
+    margin-top: 20px;  /* Espaciado superior */
 }
 
 .contenidoPrincipal h2 {
     font-size: 2rem;
     color: #333;
+    margin-bottom: 20px;
+    text-align: center;  /* Centrado del título */
+    font-weight: bold;
 }
 
 .contenidoPrincipal p {
     color: #555;
+    line-height: 1.6;  /* Mejor espaciado entre líneas para mayor legibilidad */
+    margin-bottom: 20px;
 }
+
+/* Estilo para el contenedor de productos */
+.contenidoPrincipal .productos .producto {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 10px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+
+}
+
+.contenidoPrincipal .productos .producto:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+
 
 .contenidoPrincipal form {
     margin-top: 20px;
@@ -478,7 +506,7 @@ footer {
 
 .acciones ul li a {
     text-decoration: none;
-    color: #05977a;
+    color: #05997c;
     font-size: 1.2rem;
     transition: color 0.3s ease;
 }
