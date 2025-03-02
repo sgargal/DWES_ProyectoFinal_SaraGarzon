@@ -1,5 +1,6 @@
 <?php
 namespace App\Models;
+require_once __DIR__ . '/../../config/Conexion.php';
 use Config\Conexion;
 use PDO;
 use PDOException;
@@ -194,6 +195,17 @@ class Producto{
             return $stmt->execute();
         }catch(PDOException $error){
             die("Error en la base de datos: " . $error->getMessage());
+        }
+    }
+
+    public function eliminar($id){
+        try {
+            $sql = "DELETE FROM productos WHERE id = :id";
+            $stmt = $this->db->Conectar()->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute(); 
+        } catch (PDOException $error) {
+            return false; 
         }
     }
 

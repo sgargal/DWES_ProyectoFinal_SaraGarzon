@@ -144,5 +144,28 @@
                 }
             }
         }
+
+        public function eliminar($id){
+            $productoModel = new Producto();
+
+
+            $productoEliminado = $productoModel->eliminar($id);
+
+            if($productoEliminado){
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'contenido' => 'Producto eliminado correctamente'
+                ];
+                header('Location: ../views/producto/gestion.php');
+                exit();
+            } else {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => "Hubo un problema al eliminar el prodcuto"
+                ];
+                header('Location ../views/producto/gestion.php');
+                exit();
+            }
+        }
     }
 ?>
