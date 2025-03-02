@@ -39,6 +39,34 @@ try{
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuario</title>
     <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        /* Estilos generales del select */
+        #rol-select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem; 
+            border: 1px solid #ccc;
+            border-radius: 5px; 
+            background-color: #f9f9f9;
+            color: #333; 
+            appearance: none;
+        }
+        #rol-select:focus {
+            border-color: #007bff; 
+            outline: none; 
+        }
+        #rol-select option {
+            padding: 10px;
+            background-color: #fff;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        #rol-select option:hover {
+            background-color: #f0f0f0; 
+        }
+
+    </style>
 </head>
 <body>
     <header class="header-form">
@@ -56,6 +84,7 @@ try{
 
             <form action="../../controllers/UsuarioController.php" method="POST">
                 <input type="hidden" name="id" value="<?= htmlspecialchars($usuario['id']) ?>">
+                <input type="hidden" name="action" value="editarUsuario">
 
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
@@ -75,7 +104,8 @@ try{
                     <option value="admin" <?= $usuario['rol'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
                 </select>
 
-                <input type="submit" name="action" value="editarUsuario"></input>
+                <br><br>
+                <button type="submit"> Editar </button>
             </form>
         </div>
     </main>
