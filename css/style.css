@@ -249,15 +249,23 @@ main {
 }
 
 /* Estilo para el contenedor de productos */
+.contenidoPrincipal .productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Asegura que haya espacio entre los productos */
+    gap: 5px; /* Espacio entre productos */
+}
+
 .contenidoPrincipal .productos .producto {
+    width: 45%;  /* Esto asegura que los productos ocupen el 48% del ancho, dejando espacio para 2 productos por fila */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    margin: 10px;
+    margin: 10px 0;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-
+    justify-content: center;
 }
 
 .contenidoPrincipal .productos .producto:hover {

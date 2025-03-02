@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIENDA ONLINE</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <?php
@@ -61,7 +62,7 @@
                             <h4><?= htmlspecialchars($producto['nombre']) ?></h4>
                             <p><?= htmlspecialchars($producto['descripcion']) ?></p>
                             <p>Precio: <?= number_format($producto['precio'], 2, ',', '.') ?>€</p>
-                            <a href="../app/views/producto/detalle.php?id=<?= $producto['id'] ?>" class="ver-detalle">Ver detalles</a>
+                            <a href="../app/views/carrito/carrito.php"><i class="fa fa-shopping-cart"></i></a>
                         </div>
                     <?php endforeach; ?>
                 </div>

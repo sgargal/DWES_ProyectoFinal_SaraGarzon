@@ -53,7 +53,7 @@ $usuarioLogueado = isset($_SESSION['usuario']); // Verifica si hay sesión activ
                     <li>
                         <form action="../app/controllers/UsuarioController.php" method="POST">
                             <input type="hidden" name="action" value="cerrarSesion">
-                            <button type="submit" class="btn-cerrarSesion">Cerrar sesión</button>
+                            <button type="submit" class="btn-cerrarSesion"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button>
                         </form>
                     </li>
                 <?php endif; ?>
