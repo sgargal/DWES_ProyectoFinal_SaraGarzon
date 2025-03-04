@@ -15,14 +15,6 @@ class Usuario {
     private $rol;
     private Conexion $db;
 
-    public function __construct($id = null, $nombre = null, $apellidos = null, $email = null, $password = null, $rol = null){
-        $this->id = $id;
-        $this->nombre = $nombre;
-        $this->apellidos = $apellidos;
-        $this->email = $email;
-        $this->password = $password;
-        $this->rol = $rol;
-    }
 
     // Getters and setters
     public function getId() { 
