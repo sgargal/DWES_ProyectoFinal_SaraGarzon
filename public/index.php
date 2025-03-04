@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIENDA ONLINE</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <?php
@@ -16,7 +17,7 @@
 
     use Config\Conexion;
 
-    $conexion = Conexion::Conectar();
+    $db = new Conexion();
     ?>
     <main>
         <aside class="barraLateral">
@@ -24,16 +25,17 @@
             <ul>
                 <?php
                 $sql = "SELECT id, nombre FROM categorias LIMIT 3";
-                $stmt = $conexion->prepare($sql);
+                $stmt = $db->Conectar()->prepare($sql);
                 $stmt->execute();
                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach($categorias as $categoria): ?>
-                <li>
-                    <a href="productos.php?categoria=<?=htmlspecialchars($categoria['id']) ?>">
-                        <?= htmlspecialchars($categoria['nombre']) ?>
-                    </a>
-                </li>
+                    <li>
+                        <!-- Corrige la URL -->
+                        <a href="../app/views/producto/productos.php?categoria=<?= htmlspecialchars($categoria['id']) ?>">
+                            <?= htmlspecialchars($categoria['nombre']) ?>
+                        </a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
             <a href="../app/views/categoria/categoria.php" class="ver-mas">Ver más</a>
@@ -43,24 +45,33 @@
             <?php
             if(isset($_SESSION['usuario'])){
                 $usuario = $_SESSION['usuario'];
-                echo '<h2>Bienvenido, ' .htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']) . '</h2>';
-                if($usuario['rol'] == 'admin'){
-                    echo '<p>Aquí puedes gestionar la tienda</p>';
-                }else{
-                    echo '<p>Aquí puedes ver los productos de la tienda</p>';
-                }
-                echo '<form action="../app/controllers/UsuarioController.php" method="POST">
-                        <input type="hidden" name="action" value="cerrarSesion">
-                        <button type="submit">Cerrar sesión</button>
-                    </form>';
-
-            }else{
-                echo '<h2>Bienvenido a la tienda online</h2>';
-                echo '<p>Regístrate o inicia sesión para hacer tu pedido</p>';
-            }
+                echo '<h2>Bienvenido, ' . htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellidos']) . '</h2>';
+               
             ?>
-        </section>
+            <?php }  
+             $sqlProductos = "SELECT id, nombre, descripcion, precio, imagen FROM productos";
+             $stmtProductos = $db->Conectar()->prepare($sqlProductos);
+             $stmtProductos->execute();
+             $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
 
+             if($productos): ?>
+                <h3>Todos los productos</h3>
+                <div class="productos">
+                    <?php foreach($productos as $producto): ?>
+                        <div class="producto">
+                            <img src="../src/<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" class="producto-img" width="135" height="150">
+                            <h4><?= htmlspecialchars($producto['nombre']) ?></h4>
+                            <p><?= htmlspecialchars($producto['descripcion']) ?></p>
+                            <p>Precio: <?= number_format($producto['precio'], 2, ',', '.') ?>€</p>
+                            <a href="../app/views/carrito/carrito.php"><i class="fa fa-shopping-cart"></i></a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No hay productos disponibles en este momento.</p>
+            <?php endif; ?>
+            
+        </section>
     </main>
     <footer>
         <?php

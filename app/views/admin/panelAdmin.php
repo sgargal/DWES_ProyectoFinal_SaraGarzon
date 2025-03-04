@@ -5,11 +5,11 @@ require_once '../../../config/Conexion.php';
 
 use Config\Conexion;
 
-$conex = Conexion::Conectar();
+$db = new Conexion();
 
 //Obtener todos los usuarios
 $sql = 'SELECT id, nombre, apellidos, email, rol FROM usuarios';
-$resultado = $conex->query($sql);
+$resultado = $db->Conectar()->query($sql);
 ?>
 
 <!DOCTYPE html>

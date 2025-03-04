@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+require_once __DIR__ . '/../models/usuario.php';
 use App\Models\Usuario; // Importa el modelo Usuario
 
 
@@ -71,7 +72,7 @@ class UsuarioController{
             exit();
         }
 
-        $usuarioModel = new Usuario();
+        $usuarioModel = new Usuario(null, null, null, null, null, null);
         $usuario = $usuarioModel->login($email, $password);
 
         if(!$usuario){
@@ -145,6 +146,13 @@ class UsuarioController{
         $usuario = new Usuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
         $mensaje = $usuario->editarUsuario($_SESSION['usuario']['id'], $nombre, $apellidos, $email, null, $_SESSION['usuario']['rol']);
 
+        // Si la actualización es exitosa, actualiza los valores en la sesión
+        if ($mensaje == "Perfil actualizado correctamente.") {
+            $_SESSION['usuario']['nombre'] = $nombre;
+            $_SESSION['usuario']['apellidos'] = $apellidos;
+            $_SESSION['usuario']['email'] = $email;
+        }
+
         $_SESSION['mensaje'] = [
             'tipo' => 'success', 
             'contenido' => $mensaje
@@ -155,36 +163,51 @@ class UsuarioController{
 
     public function cambiarPassword() {
         // Verificar si se ha recibido la nueva contraseña
-        if (isset($_POST['id']) && isset($_POST['nueva_password']) && isset($_POST['confirmar_password'])) {
-            $id = $_POST['id'];
-            $nueva_password = $_POST['nueva_password'];
-            $confirmar_password = $_POST['confirmar_password'];
+        if (isset($_POST['password_actual']) && isset($_POST['nueva_contraseña']) && isset($_POST['confirmar_contraseña'])) {
+            $password_actual = $_POST['password_actual'];
+            $nueva_contraseña = $_POST['nueva_contraseña'];
+            $confirmar_contraseña = $_POST['confirmar_contraseña'];
     
             // Validar las contraseñas
-            if (empty($nueva_password) || empty($confirmar_password)) {
+            if (empty($password_actual) || empty($nueva_contraseña) || empty($confirmar_contraseña)) {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
                     'contenido' => 'Las contraseñas no pueden estar vacías.'
                 ];
-                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                header("Location: ../views/usuario/cambiarPassword.php");
                 exit();
             }
-    
-            if ($nueva_password !== $confirmar_password) {
+
+            if ($nueva_contraseña !== $confirmar_contraseña) {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'error',
                     'contenido' => 'Las contraseñas no coinciden.'
                 ];
-                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                header("Location: ../views/usuario/cambiarPassword.php");
+                exit();
+            }
+
+            // Verificar la contraseña actual
+            $usuario = new Usuario($_SESSION['usuario']['id'], null, null, null, null, null);
+            $usuario_data = $usuario->obtenerUsuarioPorId($_SESSION['usuario']['id']);
+            
+            // Comparar la contraseña actual con la almacenada en la base de datos
+            if (!password_verify($password_actual, $usuario_data['password'])) {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'error',
+                    'contenido' => 'La contraseña actual es incorrecta.'
+                ];
+                header("Location: ../views/usuario/cambiarPassword.php");
                 exit();
             }
     
             // Encriptar la nueva contraseña
-            $nueva_password_encriptada = password_hash($nueva_password, PASSWORD_BCRYPT);
+            $nueva_password_encriptada = password_hash($nueva_contraseña, PASSWORD_BCRYPT);
     
             // Llamar al modelo para actualizar la contraseña
-            $usuario = new Usuario($id);
-            if ($usuario->cambiarPassword($id, $nueva_password_encriptada)) {
+            $resultado = $usuario->cambiarPassword($_SESSION['usuario']['id'], $nueva_password_encriptada);
+
+            if ($resultado) {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'success',
                     'contenido' => 'Contraseña actualizada correctamente.'
@@ -196,7 +219,7 @@ class UsuarioController{
                     'tipo' => 'error',
                     'contenido' => 'Error al cambiar la contraseña.'
                 ];
-                header("Location: ../views/usuario/cambiarPassword.php?id=$id");
+                header("Location: ../views/usuario/cambiarPassword.php");
                 exit();
             }
         } else {
@@ -216,7 +239,7 @@ class UsuarioController{
             $id = $_POST['id'];
     
             // Llamar al modelo para eliminar el usuario
-            $usuario = new Usuario($id);
+            $usuario = new Usuario($id,null,null,null,null,null);
             if ($usuario->eliminarUsuario($id)) {
                 $_SESSION['mensaje'] = [
                     'tipo' => 'success',

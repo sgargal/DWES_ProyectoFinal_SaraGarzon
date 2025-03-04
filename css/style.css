@@ -225,19 +225,55 @@ main {
 
 /* --- CONTENIDO PRINCIPAL --- */
 .contenidoPrincipal {
-    flex: 1;  /* Esto hace que el contenido ocupe el espacio restante */
+    flex: 1;  /* Hace que el contenido ocupe el espacio restante */
     padding: 20px;
     font-size: 1.2rem;
+    background-color: #fff;  /* Fondo blanco para resaltar el contenido */
+    border-radius: 8px;  /* Bordes redondeados para un diseño más suave */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  /* Sombra sutil para darle profundidad */
+    margin-top: 20px;  /* Espaciado superior */
 }
 
 .contenidoPrincipal h2 {
     font-size: 2rem;
     color: #333;
+    margin-bottom: 20px;
+    text-align: center;  /* Centrado del título */
+    font-weight: bold;
 }
 
 .contenidoPrincipal p {
     color: #555;
+    line-height: 1.6;  /* Mejor espaciado entre líneas para mayor legibilidad */
+    margin-bottom: 20px;
 }
+
+/* Estilo para el contenedor de productos */
+.contenidoPrincipal .productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Asegura que haya espacio entre los productos */
+    gap: 5px; /* Espacio entre productos */
+}
+
+.contenidoPrincipal .productos .producto {
+    width: 45%;  /* Esto asegura que los productos ocupen el 48% del ancho, dejando espacio para 2 productos por fila */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 10px 0;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    justify-content: center;
+}
+
+.contenidoPrincipal .productos .producto:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+
 
 .contenidoPrincipal form {
     margin-top: 20px;
@@ -246,22 +282,6 @@ main {
     gap: 10px;
 }
 
-.contenidoPrincipal form button {
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    width: 40%;
-}
-
-.contenidoPrincipal form button:hover {
-    background-color: #c0392b;  /* Rojo más oscuro */
-    transform: scale(1.05);
-}
 
 
 /* Estilos generales para botones */
@@ -478,7 +498,7 @@ footer {
 
 .acciones ul li a {
     text-decoration: none;
-    color: #05977a;
+    color: #05997c;
     font-size: 1.2rem;
     transition: color 0.3s ease;
 }

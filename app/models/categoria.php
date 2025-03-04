@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Models;
+<<<<<<< HEAD
+=======
+
+require_once __DIR__ . '/../../config/Conexion.php';
+>>>>>>> c44ce45be6473bc1bae740aff3d0b801a5fa3dc9
 use Config\Conexion;
 use PDO;
 use PDOException;
@@ -32,6 +37,7 @@ class Categoria{
 
             // Consulta para obtener todas las categorías
             $sql = "SELECT * FROM categorias";
+<<<<<<< HEAD
             $stmt = $this->db->Conectar()->prepare($sql);
             $stmt->execute();
 
@@ -39,6 +45,20 @@ class Categoria{
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $error){
             return "Error en la base de datos: " . $error->getMessage();
+=======
+            $stmt = $this->db->Conectar()->query($sql);
+            $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            if (empty($categorias)) {
+                return [];
+            }
+
+            return $categorias;
+        }catch(PDOException $error){
+            echo "Error en la base de datos: " . $error->getMessage();
+            return [];
+>>>>>>> c44ce45be6473bc1bae740aff3d0b801a5fa3dc9
         }
         
     }
